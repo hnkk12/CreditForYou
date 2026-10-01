@@ -8,6 +8,10 @@ __pycache__/
 data/raw/*
 !data/raw/README.md
 data/sample/
+data/processed/
+dataset isb/
 outputs/
 models/*.joblib
 models/*.metrics.json
+*.db
+!legacy/creditforyou_legacy.db

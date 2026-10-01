@@ -35,6 +35,7 @@
       "declared_income": ["declared_income", "actual_income", "true_income", "verified_income", "monthly_income", "thu_nhap", "thu_nhap_thuc_te"],
       "home_ownership": ["home_ownership", "housing", "nha_o", "tinh_trang_nha_o"],
       "purpose": ["purpose", "loan_purpose", "muc_dich", "muc_dich_vay"],
+      "verification_status": ["verification_status", "income_verification", "trang_thai_xac_minh_thu_nhap"],
       "default": ["default", "is_default", "defaulted", "default_flag", "target", "bad", "bad_flag", "label", "vo_no", "loan_status"]
     }
   },
@@ -55,6 +56,7 @@
       "dti": ["dti", "debt_to_income", "dti_ratio"],
       "home_ownership": ["home_ownership", "housing", "nha_o"],
       "purpose": ["purpose", "loan_purpose", "muc_dich"],
+      "verification_status": ["verification_status", "income_verification"],
       "age": ["age", "tuoi"],
       "delinq_2yrs": ["delinq_2yrs", "delinquencies_2y", "num_delinq"],
       "inq_last_6mths": ["inq_last_6mths", "inquiries_6m"],

@@ -34,10 +34,12 @@ def test_score_bounds():
     assert s["score_experience"] == 15 and s["score_repayment_history"] == 20 and s["score_ml"] == 15
 
 
-def test_thin_file_neutral():
+def test_thin_file_disables_missing_components():
     s = compute_score({"income_stability": 1, "estimated_monthly_income": 10e6, "pd": 0.1})
-    assert s["repayment_ratio"] == 0.5
-    assert any("lịch sử" in n for n in s["score_notes"])
+    assert s["repayment_ratio"] is None
+    assert "credit_or_repayment_history" in s["missing_components"]
+    assert s["available_weight"] == 40
+    assert 0 <= s["credit_score"] <= 100
 
 
 def test_tiers_and_rates():
@@ -57,6 +59,11 @@ def test_decision_rules():
     assert decide({**base, "months_of_data": 2}, good)["decision"] == "MANUAL_REVIEW"
     c = decide(base, {**good, "credit_score": 50})
     assert c["tier"] == "C" and c["approved_amount"] == 40e6
+    unsafe = decide({**base, "expense_income_ratio": 1.01},
+                    {**good, "dti": 0.53, "post_loan_debt_ratio": 0.53,
+                     "installment_income_ratio": 0.10, "pd_used": 0.29})
+    assert unsafe["decision"] == "MANUAL_REVIEW"
+    assert decide({**base, "expense_income_ratio": 1.25}, good)["decision"] == "REJECT"
 
 
 # --------------------------------------------------------------------------- parse
@@ -107,7 +114,7 @@ def test_income_stable_grab_driver():
     prepared, _ = prepare_transactions(_tx(monthly))
     r = estimate_income(prepared).iloc[0]
     assert r["months_of_data"] == 12
-    assert r["estimated_monthly_income"] == pytest.approx(np.mean(monthly), rel=1e-6)
+    assert r["estimated_monthly_income"] == pytest.approx(np.quantile(monthly, 0.10), abs=100)
     assert r["income_stability"] > 0.95 and r["income_confidence"] == 0.95
     assert r["repayment_capacity"] == "Cao"
 

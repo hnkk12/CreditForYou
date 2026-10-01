@@ -10,15 +10,23 @@ from .decision import decide
 from .income import estimate_income, prepare_transactions
 from .io import load_dataset, normalize_id, parse_amount, parse_label, parse_percent_ratio, parse_term_months, parse_years
 from .model import build_features, load_model, predict_pd
-from .scoring import annuity_payment, compute_score
+from .scoring import annuity_payment, compute_score, reason_codes
 
 
 def run_income(tx_path, dayfirst=None, customers=None):
-    tx = load_dataset(tx_path, "transactions")
-    if customers:
-        tx = tx[normalize_id(tx["customer_id"]).isin(set(normalize_id(pd.Series(customers, dtype=str))))]
-        if tx.empty:
-            raise KeyError(f"Không tìm thấy khách hàng {customers} trong file giao dịch.")
+    # Native synthetic banking schema contains stronger classification signals.
+    # Use chunk filtering so selecting one customer does not load the 390 MB file.
+    from .io import read_header
+    header = set(read_header(tx_path))
+    if {"timestamp", "is_salary", "is_transfer"}.issubset(header):
+        from .datasets import load_transactions
+        tx = load_transactions(path=tx_path, customers=customers)
+    else:
+        tx = load_dataset(tx_path, "transactions")
+        if customers:
+            tx = tx[normalize_id(tx["customer_id"]).isin(set(normalize_id(pd.Series(customers, dtype=str))))]
+    if tx.empty:
+        raise KeyError(f"Không tìm thấy khách hàng {customers} trong file giao dịch.")
     prepared, warnings = prepare_transactions(tx, dayfirst=dayfirst)
     return estimate_income(prepared), warnings
 
@@ -111,7 +119,8 @@ def evaluate(tx_path, applicants_path=None, model_path=DEFAULT_MODEL_PATH, dayfi
             warnings.append(f"Mô hình ML cần {missing} nhưng hồ sơ không có -> dùng giá trị điền khuyết của mô hình.")
     else:
         df["pd"] = np.nan
-        warnings.append(f"Chưa có mô hình ML ({model_path.name}) -> PD trung tính 50%. Chạy `train` trước.")
+        warnings.append(f"Chưa có mô hình ML ({model_path.name}) -> component PD bị vô hiệu hóa và trọng số "
+                        "còn lại được chuẩn hóa. Chạy `train` trước.")
 
     rows = []
     for rec in df.to_dict("records"):
@@ -119,8 +128,63 @@ def evaluate(tx_path, applicants_path=None, model_path=DEFAULT_MODEL_PATH, dayfi
         s = compute_score(rec)
         d = decide(rec, s)
         elapsed = (time.perf_counter() - t0) * 1000
-        rows.append({**s, **d, "processing_ms": round(elapsed, 3)})
+        rows.append({**s, **d, "reason_codes": reason_codes(rec, s), "processing_ms": round(elapsed, 3)})
     out = pd.concat([df.reset_index(drop=True), pd.DataFrame(rows)], axis=1)
     out["score_notes"] = out["score_notes"].map(" | ".join)
     out["decision_reasons"] = out["decision_reasons"].map(" | ".join)
+    out["reason_codes"] = out["reason_codes"].map(" | ".join)
+    return out, warnings, model
+
+
+def evaluate_synthetic_customer(customer_ids, requested_amount, term_months, purpose,
+                                years_experience, home_ownership, model_path=DEFAULT_MODEL_PATH,
+                                data_dir=None):
+    """Integrated ISB demo flow. Ground-truth monthly_income is never loaded."""
+    from pathlib import Path
+    from .config import SYNTHETIC_DATA_DIR
+    from .datasets import existing_debt_by_customer, load_synthetic_table, synthetic_paths
+
+    data_dir = Path(data_dir) if data_dir else SYNTHETIC_DATA_DIR
+    wanted = {str(v) for v in customer_ids}
+    profiles = load_synthetic_table("customers", data_dir,
+                                    usecols=["customer_id", "age", "profession", "customer_since"])
+    profiles = profiles[profiles["customer_id"].astype(str).isin(wanted)].copy()
+    if profiles.empty:
+        raise KeyError(f"Không tìm thấy khách hàng {sorted(wanted)}")
+    income, warnings = run_income(synthetic_paths(data_dir)["transactions"], customers=sorted(wanted))
+    debt = existing_debt_by_customer(data_dir)
+    df = profiles.merge(income, on="customer_id", how="left", validate="one_to_one")
+    df = df.merge(debt, on="customer_id", how="left")
+    df["existing_monthly_debt"] = df["existing_monthly_debt"].fillna(0.0)
+    df["requested_amount"] = float(requested_amount)
+    df["term_months"] = float(term_months)
+    df["purpose"] = purpose
+    df["years_experience"] = float(years_experience)
+    df["home_ownership"] = home_ownership
+    # Transaction-estimated income is explicitly not source-verified.
+    df["verification_status"] = "not_verified"
+    df["annual_inc_for_model"] = df["estimated_monthly_income"] * 12
+    customer_since = pd.to_datetime(df["customer_since"], errors="coerce")
+    as_of = pd.to_datetime(df["last_month"] + "-28", errors="coerce")
+    df["financial_tenure_years"] = ((as_of - customer_since).dt.days / 365.25).clip(lower=0)
+    loan_cfg = scoring_config()["loan_defaults"]
+    df["monthly_installment"] = [annuity_payment(requested_amount, loan_cfg["annual_interest_rate"], term_months)] * len(df)
+    model = load_model(model_path)
+    if model is None:
+        df["pd"] = np.nan
+        warnings.append("Chưa có model PD; component ML bị vô hiệu hóa.")
+    else:
+        features = build_features(df.assign(monthly_income=df["estimated_monthly_income"]))
+        df["pd"] = predict_pd(model, features)
+    df["model_version"] = model.get("model_version", model.get("model_name")) if model else None
+    rows = []
+    for rec in df.to_dict("records"):
+        started = time.perf_counter()
+        score = compute_score(rec)
+        decision = decide(rec, score)
+        rows.append({**score, **decision, "reason_codes": reason_codes(rec, score),
+                     "processing_ms": round((time.perf_counter() - started) * 1000, 3)})
+    out = pd.concat([df.reset_index(drop=True), pd.DataFrame(rows)], axis=1)
+    for col in ("score_notes", "decision_reasons", "reason_codes"):
+        out[col] = out[col].map(" | ".join)
     return out, warnings, model

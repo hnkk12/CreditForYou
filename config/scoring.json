@@ -1,5 +1,5 @@
 {
-  "_note": "Tham số nghiệp vụ của CreditForYou. Sửa ở đây, không cần sửa code. Đơn vị tiền: VND.",
+  "_note": "Tham số nghiệp vụ của CreditForYou. Tiền tệ phải nhất quán trong mỗi hồ sơ; ISB demo dùng USD.",
 
   "income": {
     "_note": "BƯỚC #2 - Ước tính thu nhập từ giao dịch",
@@ -11,10 +11,16 @@
     "haircut_floor": 0.5,
     "low_stability_percentile": 25,
     "min_months_required": 3,
+    "conservative_base": 0.85,
+    "stability_adjustment": 0.15,
+    "recurring_min_months": 2,
+    "estimated_income_positive_percentile": 10,
+    "transfer_confidence_penalty": 0.5,
     "confidence_by_months": [
+      {"min_months": 9, "confidence": 0.95},
       {"min_months": 6, "confidence": 0.95},
-      {"min_months": 3, "confidence": 0.70},
-      {"min_months": 0, "confidence": 0.40}
+      {"min_months": 3, "confidence": 0.65},
+      {"min_months": 0, "confidence": 0.35}
     ],
     "exclude_inflow_keywords": [
       "chuyen khoan noi bo", "chuyen tien tu tk", "tu tai khoan cua toi", "own account", "internal transfer",
@@ -57,9 +63,14 @@
     "min_age": 18,
     "max_age": 65,
     "max_dti_hard": 0.70,
-    "min_income_monthly": 3000000,
+    "max_expense_income_ratio_hard": 1.20,
+    "min_income_monthly": null,
     "low_confidence_to_review": 0.70,
-    "max_pd_auto_approve": 0.35
+    "max_pd_auto_approve": 0.25,
+    "max_installment_income_ratio_auto": 0.30,
+    "max_post_loan_debt_ratio_auto": 0.45,
+    "max_expense_income_ratio_auto": 0.90,
+    "_guardrail_note": "Prototype conservative guardrails: auto-approval requires requested installment <=30%, total post-loan debt service <=45%, expenses <=90% of estimated income, PD <=25%, and confidence >=70%. Hard rejection remains at total debt service >70% or expenses >120%. These are configurable research assumptions, not validated bank policy."
   },
 
   "loan_defaults": {

@@ -1,0 +1,486 @@
+{
+  "model_name": "gradient_boosting",
+  "num_features": [
+    "loan_to_income",
+    "installment_to_income",
+    "dti",
+    "years_experience",
+    "term_months",
+    "log_annual_income",
+    "log_loan_amount"
+  ],
+  "cat_features": [
+    "home_ownership",
+    "purpose",
+    "verification_status"
+  ],
+  "feature_set": "core",
+  "metrics_validation": {
+    "logistic_regression": {
+      "roc_auc": 0.6678,
+      "pr_auc": 0.3359,
+      "gini": 0.3356,
+      "ks": 0.2469,
+      "brier": 0.1512,
+      "accuracy@0.5": 0.7992,
+      "accuracy_baseline_all_good": 0.7986,
+      "decision_threshold": 0.1941,
+      "threshold_source": "validation_f1",
+      "accuracy": 0.6241,
+      "precision": 0.2948,
+      "recall": 0.6224,
+      "f1": 0.4001,
+      "confusion_matrix": [
+        [
+          29923,
+          17993
+        ],
+        [
+          4563,
+          7521
+        ]
+      ],
+      "default_rate": 0.2014,
+      "mean_pd": 0.2011,
+      "calibration_bins": [
+        {
+          "mean_predicted_pd": 0.0813,
+          "observed_default_rate": 0.08
+        },
+        {
+          "mean_predicted_pd": 0.1083,
+          "observed_default_rate": 0.1033
+        },
+        {
+          "mean_predicted_pd": 0.1273,
+          "observed_default_rate": 0.123
+        },
+        {
+          "mean_predicted_pd": 0.1456,
+          "observed_default_rate": 0.1543
+        },
+        {
+          "mean_predicted_pd": 0.1652,
+          "observed_default_rate": 0.169
+        },
+        {
+          "mean_predicted_pd": 0.1879,
+          "observed_default_rate": 0.1845
+        },
+        {
+          "mean_predicted_pd": 0.2163,
+          "observed_default_rate": 0.2242
+        },
+        {
+          "mean_predicted_pd": 0.2549,
+          "observed_default_rate": 0.2538
+        },
+        {
+          "mean_predicted_pd": 0.3086,
+          "observed_default_rate": 0.308
+        },
+        {
+          "mean_predicted_pd": 0.416,
+          "observed_default_rate": 0.4138
+        }
+      ]
+    },
+    "logistic_regression_balanced": {
+      "roc_auc": 0.6682,
+      "pr_auc": 0.3355,
+      "gini": 0.3364,
+      "ks": 0.2457,
+      "brier": 0.2276,
+      "accuracy@0.5": 0.6392,
+      "accuracy_baseline_all_good": 0.7986,
+      "decision_threshold": 0.4979,
+      "threshold_source": "validation_f1",
+      "accuracy": 0.6368,
+      "precision": 0.2994,
+      "recall": 0.5995,
+      "f1": 0.3993,
+      "confusion_matrix": [
+        [
+          30965,
+          16951
+        ],
+        [
+          4840,
+          7244
+        ]
+      ],
+      "default_rate": 0.2014,
+      "mean_pd": 0.4736,
+      "calibration_bins": [
+        {
+          "mean_predicted_pd": 0.2569,
+          "observed_default_rate": 0.08
+        },
+        {
+          "mean_predicted_pd": 0.3222,
+          "observed_default_rate": 0.1017
+        },
+        {
+          "mean_predicted_pd": 0.3639,
+          "observed_default_rate": 0.1262
+        },
+        {
+          "mean_predicted_pd": 0.4014,
+          "observed_default_rate": 0.1512
+        },
+        {
+          "mean_predicted_pd": 0.4385,
+          "observed_default_rate": 0.1725
+        },
+        {
+          "mean_predicted_pd": 0.478,
+          "observed_default_rate": 0.1835
+        },
+        {
+          "mean_predicted_pd": 0.5226,
+          "observed_default_rate": 0.2215
+        },
+        {
+          "mean_predicted_pd": 0.5762,
+          "observed_default_rate": 0.255
+        },
+        {
+          "mean_predicted_pd": 0.6395,
+          "observed_default_rate": 0.3107
+        },
+        {
+          "mean_predicted_pd": 0.737,
+          "observed_default_rate": 0.4118
+        }
+      ]
+    },
+    "gradient_boosting": {
+      "roc_auc": 0.6708,
+      "pr_auc": 0.342,
+      "gini": 0.3417,
+      "ks": 0.2497,
+      "brier": 0.1507,
+      "accuracy@0.5": 0.8,
+      "accuracy_baseline_all_good": 0.7986,
+      "decision_threshold": 0.2067,
+      "threshold_source": "validation_f1",
+      "accuracy": 0.6507,
+      "precision": 0.3065,
+      "recall": 0.5815,
+      "f1": 0.4014,
+      "confusion_matrix": [
+        [
+          32015,
+          15901
+        ],
+        [
+          5057,
+          7027
+        ]
+      ],
+      "default_rate": 0.2014,
+      "mean_pd": 0.2007,
+      "calibration_bins": [
+        {
+          "mean_predicted_pd": 0.0791,
+          "observed_default_rate": 0.074
+        },
+        {
+          "mean_predicted_pd": 0.1045,
+          "observed_default_rate": 0.106
+        },
+        {
+          "mean_predicted_pd": 0.1246,
+          "observed_default_rate": 0.1222
+        },
+        {
+          "mean_predicted_pd": 0.1437,
+          "observed_default_rate": 0.1435
+        },
+        {
+          "mean_predicted_pd": 0.1648,
+          "observed_default_rate": 0.1789
+        },
+        {
+          "mean_predicted_pd": 0.1883,
+          "observed_default_rate": 0.1849
+        },
+        {
+          "mean_predicted_pd": 0.2174,
+          "observed_default_rate": 0.221
+        },
+        {
+          "mean_predicted_pd": 0.2576,
+          "observed_default_rate": 0.2568
+        },
+        {
+          "mean_predicted_pd": 0.3113,
+          "observed_default_rate": 0.3115
+        },
+        {
+          "mean_predicted_pd": 0.4158,
+          "observed_default_rate": 0.4152
+        }
+      ]
+    },
+    "gradient_boosting_balanced": {
+      "roc_auc": 0.6704,
+      "pr_auc": 0.3421,
+      "gini": 0.3408,
+      "ks": 0.2466,
+      "brier": 0.2253,
+      "accuracy@0.5": 0.6401,
+      "accuracy_baseline_all_good": 0.7986,
+      "decision_threshold": 0.4988,
+      "threshold_source": "validation_f1",
+      "accuracy": 0.6388,
+      "precision": 0.3004,
+      "recall": 0.5975,
+      "f1": 0.3998,
+      "confusion_matrix": [
+        [
+          31105,
+          16811
+        ],
+        [
+          4864,
+          7220
+        ]
+      ],
+      "default_rate": 0.2014,
+      "mean_pd": 0.4698,
+      "calibration_bins": [
+        {
+          "mean_predicted_pd": 0.2461,
+          "observed_default_rate": 0.0758
+        },
+        {
+          "mean_predicted_pd": 0.3124,
+          "observed_default_rate": 0.1048
+        },
+        {
+          "mean_predicted_pd": 0.3582,
+          "observed_default_rate": 0.1258
+        },
+        {
+          "mean_predicted_pd": 0.3976,
+          "observed_default_rate": 0.1399
+        },
+        {
+          "mean_predicted_pd": 0.4379,
+          "observed_default_rate": 0.1762
+        },
+        {
+          "mean_predicted_pd": 0.4782,
+          "observed_default_rate": 0.19
+        },
+        {
+          "mean_predicted_pd": 0.5227,
+          "observed_default_rate": 0.2207
+        },
+        {
+          "mean_predicted_pd": 0.5765,
+          "observed_default_rate": 0.2545
+        },
+        {
+          "mean_predicted_pd": 0.6387,
+          "observed_default_rate": 0.3143
+        },
+        {
+          "mean_predicted_pd": 0.7294,
+          "observed_default_rate": 0.412
+        }
+      ]
+    },
+    "random_forest_balanced": {
+      "roc_auc": 0.6693,
+      "pr_auc": 0.3394,
+      "gini": 0.3387,
+      "ks": 0.248,
+      "brier": 0.2174,
+      "accuracy@0.5": 0.6691,
+      "accuracy_baseline_all_good": 0.7986,
+      "decision_threshold": 0.483,
+      "threshold_source": "validation_f1",
+      "accuracy": 0.6482,
+      "precision": 0.3049,
+      "recall": 0.5835,
+      "f1": 0.4005,
+      "confusion_matrix": [
+        [
+          31841,
+          16075
+        ],
+        [
+          5033,
+          7051
+        ]
+      ],
+      "default_rate": 0.2014,
+      "mean_pd": 0.456,
+      "calibration_bins": [
+        {
+          "mean_predicted_pd": 0.2521,
+          "observed_default_rate": 0.0772
+        },
+        {
+          "mean_predicted_pd": 0.3123,
+          "observed_default_rate": 0.1012
+        },
+        {
+          "mean_predicted_pd": 0.3533,
+          "observed_default_rate": 0.1213
+        },
+        {
+          "mean_predicted_pd": 0.3891,
+          "observed_default_rate": 0.1507
+        },
+        {
+          "mean_predicted_pd": 0.4218,
+          "observed_default_rate": 0.1803
+        },
+        {
+          "mean_predicted_pd": 0.4572,
+          "observed_default_rate": 0.1833
+        },
+        {
+          "mean_predicted_pd": 0.4994,
+          "observed_default_rate": 0.2193
+        },
+        {
+          "mean_predicted_pd": 0.5499,
+          "observed_default_rate": 0.2623
+        },
+        {
+          "mean_predicted_pd": 0.6149,
+          "observed_default_rate": 0.3052
+        },
+        {
+          "mean_predicted_pd": 0.7098,
+          "observed_default_rate": 0.4132
+        }
+      ]
+    }
+  },
+  "metrics_test": {
+    "gradient_boosting": {
+      "roc_auc": 0.6667,
+      "pr_auc": 0.3349,
+      "gini": 0.3334,
+      "ks": 0.2388,
+      "brier": 0.1512,
+      "accuracy@0.5": 0.7995,
+      "accuracy_baseline_all_good": 0.7986,
+      "decision_threshold": 0.2067,
+      "threshold_source": "validation_f1",
+      "accuracy": 0.6457,
+      "precision": 0.301,
+      "recall": 0.5745,
+      "f1": 0.3951,
+      "confusion_matrix": [
+        [
+          31798,
+          16118
+        ],
+        [
+          5142,
+          6942
+        ]
+      ],
+      "default_rate": 0.2014,
+      "mean_pd": 0.2009,
+      "calibration_bins": [
+        {
+          "mean_predicted_pd": 0.0794,
+          "observed_default_rate": 0.076
+        },
+        {
+          "mean_predicted_pd": 0.1051,
+          "observed_default_rate": 0.1023
+        },
+        {
+          "mean_predicted_pd": 0.1253,
+          "observed_default_rate": 0.1283
+        },
+        {
+          "mean_predicted_pd": 0.1442,
+          "observed_default_rate": 0.1555
+        },
+        {
+          "mean_predicted_pd": 0.1654,
+          "observed_default_rate": 0.1763
+        },
+        {
+          "mean_predicted_pd": 0.189,
+          "observed_default_rate": 0.188
+        },
+        {
+          "mean_predicted_pd": 0.218,
+          "observed_default_rate": 0.2123
+        },
+        {
+          "mean_predicted_pd": 0.2575,
+          "observed_default_rate": 0.252
+        },
+        {
+          "mean_predicted_pd": 0.312,
+          "observed_default_rate": 0.3113
+        },
+        {
+          "mean_predicted_pd": 0.4135,
+          "observed_default_rate": 0.4118
+        }
+      ]
+    }
+  },
+  "decision_threshold": 0.20673595649020035,
+  "train_info": {
+    "rows_used": 300000,
+    "rows_dropped_unknown_label": 305087,
+    "default_rate": 0.20140333333333332,
+    "source_columns": [
+      "default",
+      "requested_amount",
+      "annual_income",
+      "monthly_installment",
+      "term_months",
+      "years_experience",
+      "dti",
+      "home_ownership",
+      "purpose",
+      "verification_status",
+      "delinq_2yrs",
+      "inq_last_6mths",
+      "open_acc",
+      "pub_rec",
+      "revol_util"
+    ],
+    "target_mapping": {
+      "raw_status_counts": {
+        "Fully Paid": 358329,
+        "Current": 292776,
+        "Charged Off": 90137,
+        "Late (31-120 days)": 7147,
+        "In Grace Period": 2814,
+        "Late (16-30 days)": 1421,
+        "Does not meet the credit policy. Status:Fully Paid": 660,
+        "Does not meet the credit policy. Status:Charged Off": 256,
+        "Default": 13,
+        "nan": 13
+      },
+      "mapped_good": 358329,
+      "mapped_default": 90150,
+      "excluded_unresolved": 305087
+    }
+  },
+  "split_info": {
+    "train_rows": 180000,
+    "validation_rows": 60000,
+    "test_rows": 60000,
+    "test_evaluated_only_after_selection": true
+  },
+  "trained_on": "D:\\NCKH\\CreditForYou\\dataset isb\\accepted_2007_to_2018Q4.csv",
+  "trained_at": "2026-10-01T10:54:28",
+  "model_version": "creditforyou-pd-v2",
+  "target_definition": "resolved Lending Club loan_status"
+}

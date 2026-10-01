@@ -27,5 +27,6 @@ def test_without_model_and_applicants(tmp_path):
     res, warnings, model = evaluate(tmp_path / "transactions.csv", model_path=tmp_path / "missing.joblib",
                                     overrides={"requested_amount": 30e6})
     assert model is None and len(res) == 5
-    assert (res["pd_used"] == 0.5).all()
+    assert res["pd_used"].isna().all()
+    assert res["missing_components"].map(lambda x: "ml_pd" in x).all()
     assert any("Chưa có mô hình" in w for w in warnings)

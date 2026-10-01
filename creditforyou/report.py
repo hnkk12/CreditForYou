@@ -12,7 +12,7 @@ LINE = "=" * 78
 def vnd(x):
     if x is None or (isinstance(x, float) and np.isnan(x)):
         return "-"
-    return f"{x:,.0f} đ".replace(",", ".")
+    return f"{x:,.0f}".replace(",", ".")
 
 
 def print_income_table(income: pd.DataFrame, limit=20):
@@ -46,8 +46,10 @@ def print_application(r: pd.Series):
         ("Tỷ lệ nợ/thu nhập", "score_debt_to_income",
          f"(1 - {vnd(r['monthly_installment'] + r['existing_monthly_debt'])} / {vnd(r['estimated_monthly_income'])}) × {w['debt_to_income']}"),
         ("Kinh nghiệm", "score_experience", f"{r.get('years_experience', 0) or 0:g} năm / 30 × {w['experience']}"),
-        ("Lịch sử trả nợ", "score_repayment_history", f"{r['repayment_ratio']:.0%} × {w['repayment_history']}"),
-        ("Mô hình ML", "score_ml", f"(1 - PD {r['pd_used']:.1%}) × {w['ml_probability']}"),
+        ("Lịch sử trả nợ", "score_repayment_history",
+         "không đủ dữ liệu" if r["repayment_ratio"] is None else f"{r['repayment_ratio']:.0%} × {w['repayment_history']}"),
+        ("Mô hình ML", "score_ml",
+         "không có model" if r["pd_used"] is None else f"(1 - PD {r['pd_used']:.1%}) × {w['ml_probability']}"),
     ]
     for label, key, formula in items:
         print(f"   {label:18s}: {r[key]:6.2f}  <- {formula}")

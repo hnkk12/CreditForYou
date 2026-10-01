@@ -1,0 +1,12 @@
+{
+  "n_customers": 500,
+  "mae": 876.9981599999999,
+  "rmse": 1724.374415673928,
+  "mape": 0.22893063504279465,
+  "smape": 0.2717969224867327,
+  "median_absolute_percentage_error": 0.08834977776614869,
+  "within_10pct": 0.616,
+  "within_20pct": 0.724,
+  "mean_signed_error": -50.243919999999974,
+  "warnings": []
+}

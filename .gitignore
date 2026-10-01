@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.DS_Store
+
+# dữ liệu thật & kết quả không đưa lên git
+data/raw/*
+!data/raw/README.md
+data/sample/
+outputs/
+models/*.joblib
+models/*.metrics.json

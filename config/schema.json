@@ -1,0 +1,72 @@
+{
+  "_note": "Map tên cột trong dataset -> tên chuẩn của CreditForYou. Tên cột được so khớp sau khi chuẩn hoá (chữ thường, bỏ dấu, khoảng trắng/gạch -> _). Nếu dataset dùng tên lạ: thêm alias vào đây, HOẶC điền 'overrides' (tên chuẩn -> tên cột thật).",
+
+  "transactions": {
+    "required": ["customer_id", "date"],
+    "required_one_of": [["amount"], ["inflow"]],
+    "overrides": {},
+    "columns": {
+      "customer_id": ["customer_id", "cust_id", "client_id", "user_id", "applicant_id", "account_id", "account_no", "ma_kh", "ma_khach_hang", "id_khach_hang", "id"],
+      "date": ["date", "transaction_date", "txn_date", "trans_date", "posting_date", "value_date", "booking_date", "timestamp", "datetime", "ngay", "ngay_giao_dich", "thoi_gian"],
+      "amount": ["amount", "amt", "transaction_amount", "txn_amount", "value", "so_tien", "so_tien_giao_dich"],
+      "direction": ["direction", "type", "transaction_type", "txn_type", "dr_cr", "debit_credit", "cr_dr", "flow", "loai", "loai_giao_dich", "no_co"],
+      "inflow": ["inflow", "credit_amount", "credit", "deposit", "deposits", "money_in", "amount_in", "tien_vao", "ghi_co", "so_tien_ghi_co"],
+      "outflow": ["outflow", "debit_amount", "debit", "withdrawal", "withdrawals", "money_out", "amount_out", "tien_ra", "ghi_no", "so_tien_ghi_no"],
+      "description": ["description", "narrative", "narration", "memo", "remark", "remarks", "details", "content", "noi_dung", "dien_giai", "mo_ta"],
+      "category": ["category", "txn_category", "transaction_category", "mcc_category", "danh_muc", "nhom"],
+      "status": ["status", "txn_status", "trang_thai"]
+    }
+  },
+
+  "applicants": {
+    "required": ["customer_id"],
+    "overrides": {},
+    "columns": {
+      "customer_id": ["customer_id", "cust_id", "client_id", "user_id", "applicant_id", "account_id", "member_id", "ma_kh", "ma_khach_hang", "id_khach_hang", "id"],
+      "age": ["age", "tuoi", "customer_age"],
+      "years_experience": ["years_experience", "experience_years", "work_experience", "years_employed", "emp_length", "employment_length", "kinh_nghiem", "so_nam_kinh_nghiem", "tham_nien"],
+      "requested_amount": ["requested_amount", "loan_amount", "loan_amnt", "amount_requested", "funded_amnt", "so_tien_vay", "khoan_vay"],
+      "term_months": ["term_months", "term", "loan_term", "tenor", "ky_han", "thoi_han_vay"],
+      "monthly_installment": ["monthly_installment", "installment", "monthly_payment", "emi", "tra_hang_thang", "so_tien_tra_hang_thang"],
+      "existing_monthly_debt": ["existing_monthly_debt", "existing_debt_payment", "current_debt_payment", "other_debt_monthly", "no_hien_tai_hang_thang", "tra_no_hien_tai"],
+      "past_loans_total": ["past_loans_total", "past_loans", "total_loans", "num_loans", "number_of_loans", "so_khoan_vay", "tong_so_khoan_vay"],
+      "past_loans_on_time": ["past_loans_on_time", "on_time_loans", "loans_paid_on_time", "on_time_count", "so_lan_tra_dung_han"],
+      "on_time_rate": ["on_time_rate", "repayment_rate", "ty_le_tra_dung_han"],
+      "declared_income": ["declared_income", "actual_income", "true_income", "verified_income", "monthly_income", "thu_nhap", "thu_nhap_thuc_te"],
+      "home_ownership": ["home_ownership", "housing", "nha_o", "tinh_trang_nha_o"],
+      "purpose": ["purpose", "loan_purpose", "muc_dich", "muc_dich_vay"],
+      "default": ["default", "is_default", "defaulted", "default_flag", "target", "bad", "bad_flag", "label", "vo_no", "loan_status"]
+    }
+  },
+
+  "loans": {
+    "_note": "Dataset huấn luyện mô hình ML xác suất vỡ nợ (VD: Lending Club). Phải có cột nhãn (loan_status hoặc default).",
+    "required": ["default", "requested_amount"],
+    "required_one_of": [["annual_income"], ["monthly_income"]],
+    "overrides": {},
+    "columns": {
+      "default": ["default", "loan_status", "is_default", "defaulted", "default_flag", "target", "bad", "bad_flag", "label", "vo_no"],
+      "requested_amount": ["loan_amnt", "loan_amount", "requested_amount", "amount_requested", "funded_amnt", "so_tien_vay"],
+      "annual_income": ["annual_inc", "annual_income", "income_annual", "thu_nhap_nam"],
+      "monthly_income": ["monthly_income", "monthly_inc", "declared_income", "thu_nhap", "thu_nhap_thang"],
+      "monthly_installment": ["installment", "monthly_installment", "monthly_payment", "emi"],
+      "term_months": ["term", "term_months", "loan_term", "ky_han"],
+      "years_experience": ["emp_length", "years_experience", "employment_length", "experience_years", "kinh_nghiem"],
+      "dti": ["dti", "debt_to_income", "dti_ratio"],
+      "home_ownership": ["home_ownership", "housing", "nha_o"],
+      "purpose": ["purpose", "loan_purpose", "muc_dich"],
+      "age": ["age", "tuoi"],
+      "delinq_2yrs": ["delinq_2yrs", "delinquencies_2y", "num_delinq"],
+      "inq_last_6mths": ["inq_last_6mths", "inquiries_6m"],
+      "open_acc": ["open_acc", "open_accounts"],
+      "pub_rec": ["pub_rec", "public_records"],
+      "revol_util": ["revol_util", "revolving_utilization", "credit_util"]
+    }
+  },
+
+  "label_values": {
+    "_note": "Giá trị nhãn dạng chữ (loan_status của Lending Club). Các trạng thái khác (Current, In Grace Period...) bị loại vì chưa biết kết cục.",
+    "bad": ["charged off", "default", "late (31-120 days)", "does not meet the credit policy. status:charged off", "yes", "y", "true", "bad", "vo no"],
+    "good": ["fully paid", "does not meet the credit policy. status:fully paid", "no", "n", "false", "good", "tra du"]
+  }
+}

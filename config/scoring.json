@@ -1,0 +1,70 @@
+{
+  "_note": "Tham số nghiệp vụ của CreditForYou. Sửa ở đây, không cần sửa code. Đơn vị tiền: VND.",
+
+  "income": {
+    "_note": "BƯỚC #2 - Ước tính thu nhập từ giao dịch",
+    "lookback_months": 12,
+    "trim_partial_months": true,
+    "high_stability_threshold": 0.80,
+    "low_stability_method": "haircut",
+    "_low_stability_note": "haircut: thu nhập = TB × (floor + (1-floor) × độ ổn định) -> giảm tối đa 50%. percentile: lấy phân vị (dễ ra 0 nếu có vài tháng không có tiền vào).",
+    "haircut_floor": 0.5,
+    "low_stability_percentile": 25,
+    "min_months_required": 3,
+    "confidence_by_months": [
+      {"min_months": 6, "confidence": 0.95},
+      {"min_months": 3, "confidence": 0.70},
+      {"min_months": 0, "confidence": 0.40}
+    ],
+    "exclude_inflow_keywords": [
+      "chuyen khoan noi bo", "chuyen tien tu tk", "tu tai khoan cua toi", "own account", "internal transfer",
+      "giai ngan", "disbursement", "loan", "khoan vay",
+      "hoan tien", "refund", "reversal", "hoan tra",
+      "tiet kiem dao han", "tat toan", "saving maturity"
+    ],
+    "exclude_inflow_categories": ["transfer_internal", "loan_disbursement", "refund", "savings_withdrawal"],
+    "debt_payment_keywords": [
+      "tra no", "tra gop", "thanh toan khoan vay", "thanh toan the tin dung", "tra lai vay",
+      "loan repayment", "loan payment", "credit card payment", "installment", "emi"
+    ],
+    "excluded_status": ["failed", "fail", "cancelled", "canceled", "reversed", "declined", "rejected", "that bai", "huy"]
+  },
+
+  "scoring": {
+    "_note": "BƯỚC #5 - Thang 100 điểm, 5 thành phần",
+    "weights": {
+      "income_stability": 25,
+      "debt_to_income": 25,
+      "experience": 15,
+      "repayment_history": 20,
+      "ml_probability": 15
+    },
+    "experience_full_years": 30,
+    "no_history_repayment_ratio": 0.5,
+    "_no_history_note": "Khách chưa từng vay (thin-file) -> coi như 50% (trung tính) thay vì 0 điểm, để không phạt nhóm khách mục tiêu.",
+    "dti_includes_existing_debt": true
+  },
+
+  "tiers": [
+    {"tier": "A", "min_score": 80, "label": "Rất tốt",           "decision": "AUTO_APPROVE",  "rate_range": [9, 10],  "max_amount_ratio": null},
+    {"tier": "B", "min_score": 60, "label": "Tốt",               "decision": "AUTO_APPROVE",  "rate_range": [11, 13], "max_amount_ratio": null},
+    {"tier": "C", "min_score": 40, "label": "Rủi ro trung bình", "decision": "MANUAL_REVIEW", "rate_range": [14, 16], "max_amount_ratio": 0.8},
+    {"tier": "D", "min_score": 0,  "label": "Rủi ro cao",        "decision": "REJECT",        "rate_range": null,     "max_amount_ratio": 0}
+  ],
+
+  "business_rules": {
+    "_note": "Quy tắc chặn/đẩy review - chạy TRƯỚC khi xếp hạng. null = tắt rule.",
+    "min_age": 18,
+    "max_age": 65,
+    "max_dti_hard": 0.70,
+    "min_income_monthly": 3000000,
+    "low_confidence_to_review": 0.70,
+    "max_pd_auto_approve": 0.35
+  },
+
+  "loan_defaults": {
+    "_note": "Dùng khi hồ sơ chỉ có số tiền vay mà không có khoản trả hàng tháng",
+    "annual_interest_rate": 0.12,
+    "term_months": 36
+  }
+}

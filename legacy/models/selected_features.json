@@ -1,0 +1,17 @@
+[
+    "credit_util",
+    "risk_flags",
+    "dti",
+    "digital_payment_rate",
+    "housing_encoded",
+    "on_time_rate",
+    "spend_income_ratio",
+    "city_tier",
+    "delinq_total",
+    "monthly_spend",
+    "savings_days",
+    "tx_late_count",
+    "tx_debit_credit_ratio",
+    "positive_habits",
+    "habit_risk_balance"
+]

@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>CreditForYou</title>
+<style>
+@page { size: 1920px 1080px; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; }
+body { font-family: "Noto Sans", "Segoe UI", Arial, sans-serif; color: #16202c; background: #f4f7fb;
+       -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.page { width: 1920px; height: 1080px; padding: 20px 30px 16px; display: grid;
+        grid-template-rows: 156px 612px 1fr; gap: 12px; }
+header { display: grid; grid-template-columns: 1fr 940px; gap: 20px; align-items: center;
+         background: #12305c; color: #fff; border-radius: 14px; padding: 12px 20px 12px 26px; }
+.kicker { font-size: 13px; letter-spacing: .07em; text-transform: uppercase; opacity: .78; }
+h1 { font-size: 30px; font-weight: 700; line-height: 1.12; margin: 3px 0 4px; }
+.sub { font-size: 19px; font-weight: 600; color: #ffc27d; line-height: 1.25; }
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
+.kpi { background: rgba(255,255,255,.11); border-radius: 10px; padding: 9px 12px; height: 128px; position: relative; }
+.kpi b { display: block; font-size: 27px; line-height: 1.1; color: #ffc27d; font-weight: 700; white-space: nowrap; }
+.kpi span { font-size: 14px; line-height: 1.25; display: block; margin-top: 4px; }
+.kpi i { position: absolute; right: 10px; bottom: 7px; font-size: 11.5px; font-style: normal; opacity: .7; }
+.main { display: grid; grid-template-columns: 430px 1fr 600px; gap: 12px; min-height: 0; }
+.bottom { display: grid; grid-template-columns: 650px 1fr 640px; gap: 12px; min-height: 0; }
+.card { background: #fff; border-radius: 12px; padding: 11px 16px; box-shadow: 0 1px 3px rgba(18,48,92,.10);
+        border-top: 5px solid #12305c; min-height: 0; overflow: hidden; }
+.card.accent { border-top-color: #e07a1f; }
+.step { font-size: 13.5px; font-weight: 700; color: #e07a1f; letter-spacing: .06em; text-transform: uppercase; }
+h2 { font-size: 22px; line-height: 1.15; margin: 2px 0 7px; color: #12305c; }
+h3 { font-size: 15.5px; margin: 6px 0 4px; color: #12305c; }
+p, li { font-size: 15px; line-height: 1.3; }
+ul { padding-left: 18px; }
+li { margin-bottom: 2px; }
+.small, .small li { font-size: 14px; line-height: 1.3; }
+.muted { color: #5b6573; }
+.chain { display: grid; gap: 3px; margin: 3px 0 6px; }
+.box { border-radius: 8px; padding: 6px 11px; font-size: 14.5px; line-height: 1.25; }
+.box.grey { background: #eef2f7; }
+.box.red { background: #fbe9e7; color: #7d241b; }
+.box.navy { background: #12305c; color: #fff; font-weight: 600; }
+.arrow { text-align: center; color: #5b6573; font-size: 11px; line-height: 1; }
+.math { background: #fbe9e7; border-left: 4px solid #c0392b; border-radius: 0 8px 8px 0; padding: 6px 10px;
+        font-size: 14px; line-height: 1.3; margin-top: 6px; }
+.math b.big { font-size: 16px; color: #c0392b; }
+.lever { background: #fff3e6; border-left: 4px solid #e07a1f; border-radius: 0 8px 8px 0; padding: 6px 10px;
+         font-size: 14px; line-height: 1.3; margin-top: 6px; }
+.fa { display: flex; align-items: center; justify-content: center; color: #e07a1f; font-size: 18px; font-weight: 700; }
+.arch { display: grid; grid-template-columns: 1fr 14px 1.25fr 14px 0.82fr 14px 1.2fr; margin: 2px 0 6px; }
+.lane { background: #eef2f7; border-radius: 10px; padding: 7px 9px; }
+.lane.act { background: #fff3e6; border: 2px solid #e07a1f; }
+.lane .when { font-size: 11.5px; color: #e07a1f; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+.lane h4 { font-size: 15px; color: #12305c; margin: 1px 0 3px; }
+.lane li, .lane p { font-size: 13.4px; line-height: 1.25; }
+.lane ul { padding-left: 14px; }
+.lane .muted { font-size: 12.5px; margin-top: 3px; }
+.rule { font-size: 13.4px; line-height: 1.27; background: #eef2f7; border-radius: 8px; padding: 5px 9px; margin-top: 5px; }
+.impact { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 5px; }
+.impact div { border-radius: 8px; padding: 6px 9px; font-size: 13.4px; line-height: 1.26; }
+.impact b.t { display: block; font-size: 14px; margin-bottom: 1px; }
+.i1 { background: #e8f1fb; } .i1 b.t { color: #12305c; }
+.i2 { background: #e3f4ec; } .i2 b.t { color: #1f8a5b; }
+.i3 { background: #eef6e6; } .i3 b.t { color: #3d7a1c; }
+.mlnote { font-size: 13.4px; line-height: 1.27; margin-top: 5px; }
+.risk { background: #fbe9e7; border-left: 4px solid #c0392b; border-radius: 0 8px 8px 0; padding: 6px 10px; margin-top: 5px;
+        font-size: 13.6px; line-height: 1.28; }
+.ci { font-size: 12.8px; color: #5b6573; margin: 1px 0 2px; line-height: 1.25; }
+svg text.ax { font: 600 13.5px "Noto Sans", "Segoe UI", Arial; fill: #16202c; }
+svg text.axs { font: 12px "Noto Sans", "Segoe UI", Arial; fill: #5b6573; }
+svg text.val { font: 700 14px "Noto Sans", "Segoe UI", Arial; }
+.road { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 6px; }
+.phase { border-left: 5px solid #12305c; background: #eef2f7; border-radius: 0 8px 8px 0; padding: 8px 10px; }
+.phase b { font-size: 15.5px; color: #12305c; }
+.phase p { font-size: 14.5px; line-height: 1.3; margin-top: 3px; }
+.gate { font-size: 14px; color: #a45a12; font-weight: 700; margin-top: 6px; line-height: 1.25; }
+table { width: 100%; border-collapse: collapse; margin-top: 3px; }
+td, th { font-size: 14px; padding: 3px 5px; border-bottom: 1px solid #e3e8ef; text-align: left; line-height: 1.2; }
+th { color: #5b6573; font-weight: 600; font-size: 12.5px; }
+td.n { text-align: right; font-weight: 700; white-space: nowrap; color: #12305c; }
+.data p { font-size: 14px; line-height: 1.28; }
+.src { color: #5b6573; font-size: 12.8px; }
+.sim { display: inline-block; background: #ffe9d2; color: #a45a12; font-weight: 700; font-size: 11.5px; border-radius: 99px; padding: 0 7px; margin-left: 6px; letter-spacing: .03em; }
+</style></head>
+<body><div class="page">
+
+<header>
+  <div>
+    <div class="kicker">HLBVN × UEH.ISB Business Challenge 2026 · Round 2 · Point-of-purchase lending</div>
+    <h1>CreditForYou: instant checkout credit for freelancers, gig workers &amp; online sellers</h1>
+    <div class="sub">Cash-flow rules decide today · ML learns from real repayments to sharpen limits tomorrow</div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><b>1.8–4.6 days → instant</b><span>decision turnaround (case baseline, Exhibit 2) → pre-computed limit lookup, target &lt; 1 s</span></div>
+    <div class="kpi"><b>380k → 50k VND</b><span>cost per decision: case benchmark → automated (team assumption)</span></div>
+    <div class="kpi"><b>16% → 51%</b><span>gig workers &amp; online merchants with a limit vs proxy rule</span><i>simulated · n = 43</i></div>
+    <div class="kpi"><b>4.6%</b><span>break-even 6-month default = stop-rule; RoC 28% in base case</span><i>simulated</i></div>
+  </div>
+</header>
+
+<section class="main">
+  <div class="card">
+    <div class="step">① Problem diagnosis</div>
+    <h2>The checkout decision is welded to manual underwriting</h2>
+    <div class="chain">
+      <div class="box grey">No payslip · short or no bureau file · income arrives via platforms, e-wallets, online sales</div>
+      <div class="arrow">▼</div>
+      <div class="box navy">Centralised manual review: documents, CIC check, credit officer</div>
+      <div class="arrow">▼</div>
+      <div class="box red"><b>1.8–4.6 business days</b> → the purchase moment is gone<br><b>Decline</b> → lost sale for bank &amp; merchant</div>
+    </div>
+    <div class="math"><b>The review costs more than a small loan earns:</b> a 5M VND, 6-month loan at 12% earns ≈ <b class="big">276k VND</b>
+    (interest + 2% merchant fee) vs a <b>380k VND</b> review (Exhibit 2). Review only pays above ≈ <b>6.9M VND</b>, yet loans start at 1.6M.</div>
+    <div class="lever"><b>Highest leverage:</b> a faster review still costs 380k and keeps customers waiting; collections act only after a "yes".
+    Taking the review out of checkout fixes speed <i>and</i> unit cost at once.</div>
+    <h3>Root cause: income is real but invisible to a document review (stability, 1 − CV)</h3>
+    <svg width="400" height="96" viewBox="0 0 400 96" xmlns="http://www.w3.org/2000/svg"><text x="0" y="20" class="ax">Freelancer</text><rect x="150" y="4" width="79.8" height="20" rx="3" fill="#e07a1f"/><text x="235.8" y="20" class="val">0.40</text><text x="0" y="50" class="ax">Business owner</text><rect x="150" y="34" width="121.6" height="20" rx="3" fill="#e07a1f"/><text x="277.6" y="50" class="val">0.61</text><text x="0" y="80" class="ax">Salaried manager</text><rect x="150" y="64" width="191.6" height="20" rx="3" fill="#9aa3ae"/><text x="347.6" y="80" class="val">0.96</text></svg>
+  </div>
+
+  <div class="card accent">
+    <div class="step">② Solution concept · data-to-decision architecture</div>
+    <h2>Score cash-flow in advance; the till only checks the limit</h2>
+    <div class="arch">
+      <div class="lane"><div class="when">1 · Data inputs</div><h4>What we read</h4>
+        <ul>
+          <li>12 months of CASA transactions</li>
+          <li>Active loan payments</li>
+          <li>Age, tenure, segment</li>
+          <li>Basket value at checkout</li>
+        </ul>
+        <p class="muted">Phase 2: platform / e-wallet data with consent. No payslip needed.</p></div>
+      <div class="fa">▶</div>
+      <div class="lane"><div class="when">2 · Logic · nightly batch</div><h4>How we decide</h4>
+        <ul>
+          <li>Clean: drop own transfers, refunds, disbursements</li>
+          <li>Income by source, gross→net (0.89 / 0.53)</li>
+          <li>Capacity = min(50% disposable, 20% income, 50% income − debt)</li>
+          <li>Tier A–D + guardrails</li>
+          <li>Limit = min(capacity × annuity, caps)</li>
+        </ul></div>
+      <div class="fa">▶</div>
+      <div class="lane"><div class="when">3 · Outputs</div><h4>What we produce</h4>
+        <ul>
+          <li>Limit + status</li>
+          <li>Reason codes</li>
+          <li>Tier &amp; APR band</li>
+          <li>Audit trail</li>
+        </ul></div>
+      <div class="fa">▶</div>
+      <div class="lane act"><div class="when">4 · Business actions</div><h4>What the bank does</h4>
+        <ul>
+          <li><b>Till:</b> real-time eKYC &amp; fraud check, then approve / counter-offer / decline</li>
+          <li><b>Targeting:</b> offers shown only to pre-approved customers</li>
+          <li>3 on-time → +25%; 30+ DPD → freeze</li>
+          <li><b>ML:</b> repayment labels train a default model</li>
+        </ul></div>
+    </div>
+    <h3>Output on 500 simulated customers <span class="sim">SIMULATED</span> · median limit 15M VND · caps A 90M / B 60M / C 30M / new 30M · tenor 3–12 months</h3>
+    <svg width="780" height="62" viewBox="0 0 780 62" xmlns="http://www.w3.org/2000/svg"><rect x="0.0" y="0" width="143.5" height="30" fill="#12305c"/><text x="71.8" y="21" class="val" fill="#fff" text-anchor="middle">92</text><rect x="143.5" y="0" width="310.4" height="30" fill="#4f7cba"/><text x="298.7" y="21" class="val" fill="#fff" text-anchor="middle">199</text><rect x="454.0" y="0" width="49.9" height="30" fill="#e07a1f"/><text x="478.9" y="21" class="val" fill="#fff" text-anchor="middle">32</text><rect x="503.9" y="0" width="276.1" height="30" fill="#9aa3ae"/><text x="641.9" y="21" class="val" fill="#fff" text-anchor="middle">177</text><rect x="0" y="44" width="12" height="12" fill="#12305c"/><text x="17" y="55" class="axs">Full limit 92 (18%)</text><rect x="180.6" y="44" width="12" height="12" fill="#4f7cba"/><text x="197.6" y="55" class="axs">Reduced limit 199 (40%)</text><rect x="390.8" y="44" width="12" height="12" fill="#e07a1f"/><text x="407.8" y="55" class="axs">Offline review 32 (6%)</text><rect x="593.6" y="44" width="12" height="12" fill="#9aa3ae"/><text x="610.6" y="55" class="axs">Not eligible 177 (35%)</text></svg>
+    <div class="rule"><b>Guardrails only tighten:</b> reject if debt service &gt; 70%, spending &gt; 120% or cash-flow deficit; limit ×0.5 if tier C, debt &gt; 45% or spending &gt; 90%.
+    <b>Salaried with credit</b> (35.5% of mix) keep today's bureau terms via STP; cash-flow adds an affordability flag.</div>
+    <div class="impact">
+      <div class="i1"><b class="t">Community impact</b>Thin-file workers get a first formal credit line instead of informal credit; repaying grows the limit and a credit history.</div>
+      <div class="i2"><b class="t">Financially sustainable</b>Profitable while default &lt; 4.6% (RoC 28%); stop-rule; rules in a config the credit committee owns.</div>
+      <div class="i3"><b class="t">Environmentally light</b>Paperless, no documents to scan or courier; one nightly CPU batch on data the bank already holds.</div>
+    </div>
+    <p class="mlnote"><b>Why ML is not the decision-maker yet:</b> no POP default labels exist. A Lending Club PD model (300k loans, AUC 0.67)
+    mis-ranks tiers (B 2.1% &gt; C 1.9%), so it runs as a challenger until real labels beat the rules.</p>
+  </div>
+
+  <div class="card">
+    <div class="step">③ Intervention justification · why it works and pays</div>
+    <h2>3× more gig workers &amp; online merchants served, profitable while default &lt; 4.6%</h2>
+    <svg width="570" height="160" viewBox="0 0 570 160" xmlns="http://www.w3.org/2000/svg"><text x="0" y="17" class="ax">Gig / platform workers</text><text x="0" y="32" class="axs">15.0% of applications · n = 26</text><rect x="222" y="4" width="22.9" height="12" rx="3" fill="#9aa3ae"/><text x="250.9" y="14" class="val" fill="#5b6573">8%</text><rect x="222" y="18" width="171.9" height="12" rx="3" fill="#e07a1f"/><text x="399.9" y="28" class="val">58%</text><text x="0" y="51" class="ax">Online merchants (MSME)</text><text x="0" y="66" class="axs">14.5% of applications · n = 17</text><rect x="222" y="38" width="87.6" height="12" rx="3" fill="#9aa3ae"/><text x="315.6" y="48" class="val" fill="#5b6573">29%</text><rect x="222" y="52" width="122.7" height="12" rx="3" fill="#e07a1f"/><text x="350.7" y="62" class="val">41%</text><text x="0" y="85" class="ax">First-time borrowers</text><text x="0" y="100" class="axs">14.5% of applications · n = 55</text><text x="222" y="82" class="axs">no proxy baseline (rule needs credit history)</text><rect x="222" y="86" width="260.1" height="12" rx="3" fill="#e07a1f"/><text x="488.1" y="96" class="val">87%</text><text x="0" y="119" class="ax">Salaried, no credit</text><text x="0" y="134" class="axs">20.5% of applications · n = 234</text><text x="222" y="116" class="axs">no proxy baseline (rule needs credit history)</text><rect x="222" y="120" width="184.7" height="12" rx="3" fill="#e07a1f"/><text x="412.7" y="130" class="val">62%</text><rect x="222" y="147" width="11" height="11" fill="#9aa3ae"/><text x="238" y="157" class="axs">Proxy of today&#39;s rule</text><rect x="372" y="147" width="11" height="11" fill="#e07a1f"/><text x="388" y="157" class="axs">CreditForYou limit</text></svg>
+    <div class="ci">Reweighted to the Exhibit 2 mix: instant limits for <b>56%</b> of inbound applications.
+    Gig + MSME n = 43 (95% CI 37%–65%): re-validate in the backtest.</div>
+    <svg width="570" height="160" viewBox="0 0 570 160" xmlns="http://www.w3.org/2000/svg"><text x="0" y="14" class="axs">Annual profit, million VND, by default scenario (291 simulated customers with a limit)</text><line x1="10" x2="570" y1="63.1" y2="63.1" stroke="#5b6573" stroke-width="1.5"/><rect x="46.8" y="50.4" width="84" height="12.6" rx="3" fill="#1f8a5b"/><text x="88.8" y="44.4" class="val" text-anchor="middle" fill="#1f8a5b">+95M</text><text x="88.8" y="136" class="ax" text-anchor="middle">Base case</text><text x="88.8" y="154" class="axs" text-anchor="middle">PD 3.3% · RoC 28%</text><rect x="184.2" y="63.1" width="84" height="20.2" rx="3" fill="#c0392b"/><text x="272.2" y="79.1" class="val" fill="#c0392b">-151M</text><text x="226.2" y="136" class="ax" text-anchor="middle">Default ×2</text><text x="226.2" y="154" class="axs" text-anchor="middle">PD 6.6% · RoC -45%</text><rect x="321.8" y="63.1" width="84" height="52.9" rx="3" fill="#c0392b"/><text x="363.8" y="108.0" class="val" text-anchor="middle" fill="#fff">-398M</text><text x="363.8" y="136" class="ax" text-anchor="middle">Default ×3</text><text x="363.8" y="154" class="axs" text-anchor="middle">PD 10.0% · RoC -119%</text><rect x="459.2" y="34.0" width="84" height="29.1" rx="3" fill="#1f8a5b"/><text x="501.2" y="28.0" class="val" text-anchor="middle" fill="#1f8a5b">+219M</text><text x="501.2" y="136" class="ax" text-anchor="middle">Lending Club PD</text><text x="501.2" y="154" class="axs" text-anchor="middle">PD 1.7% · RoC 66%</text></svg>
+    <ul class="small" style="margin-top:2px">
+      <li><b>Speed &amp; cost:</b> 1.8–4.6 days, 380k/file → instant, ≈ 50k; 199 files skip review.</li>
+      <li><b>Reach:</b> +211 newly served, −93 over-indebted (mortgage-heavy) declined → net +118.</li>
+      <li><b>Value:</b> profit 95M VND/yr, RoC 28%; +1 pp merchant fee = +113M VND.</li>
+    </ul>
+    <div class="risk"><b>Downside is real, and capped:</b> at ×2 / ×3 default, losses reach 4.3% / 6.5% of volume vs break-even
+    3.0% (US BNPL charge-off 3.8%). Controls: stop-rule at 4.6% PD,
+    30M VND starter cap, ×0.5 reduced limits, short tenor, fixed pilot loss budget, pricing lever.</div>
+  </div>
+</section>
+
+<section class="bottom">
+  <div class="card">
+    <div class="step">④ Feasibility · 6–12 months, existing customers first</div>
+    <div class="road">
+      <div class="phase"><b>0–3 mo · Backtest</b>
+        <p>Run read-only on real HLBVN accounts; re-learn income factors; committee signs off the config.</p>
+        <div class="gate">Gate: income error ≤ 10%; segment results hold at full sample</div></div>
+      <div class="phase"><b>3–6 mo · Pilot</b>
+        <p>1–2 merchants, low caps, fixed loss budget, weekly arrears tracking.</p>
+        <div class="gate">Gate: 6-mo default ≤ 3%; 30+ DPD A &lt; 2%, B &lt; 5%</div></div>
+      <div class="phase"><b>6–12 mo · Scale + ML</b>
+        <p>More merchants, limit growth on, partner data, ML challenger on repayment labels.</p>
+        <div class="gate">Stop: default &gt; 4.6% (break-even)</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step">⑤ Solution concept · KPIs measuring bottleneck relief</div>
+    <table>
+      <tr><th>KPI</th><th>Baseline (case)</th><th>Target</th><th style="text-align:right">Sim.</th></tr>
+      <tr><td>Decision turnaround</td><td>1.8–4.6 days</td><td>&lt; 1 s</td><td class="n">lookup</td></tr>
+      <tr><td>Cost per decision</td><td>380k VND</td><td>≤ 50k VND</td><td class="n">assumed</td></tr>
+      <tr><td>Checkout conversion*</td><td>n/a</td><td>≥ 60%</td><td class="n">58%</td></tr>
+      <tr><td>Gig &amp; MSME with a limit</td><td>16% proxy</td><td>≥ 50%</td><td class="n">51%</td></tr>
+      <tr><td>Files sent to offline review</td><td>100% manual</td><td>≤ 10%</td><td class="n">6.4%</td></tr>
+      <tr><td>6-month default (stop &gt; 4.6%)</td><td>n/a</td><td>≤ 3%</td><td class="n">pilot</td></tr>
+    </table>
+    <p class="src" style="margin-top:2px">* approve + counter-offer on a 5M VND basket</p>
+  </div>
+
+  <div class="card data">
+    <div class="step">⑥ Data &amp; assumptions</div>
+    <p><b>Illustrative simulation:</b> stand-in synthetic data (500 customers, 1.67M transactions, USD → VND at 25,000), reweighted to the Exhibit 2 mix;
+    official case data arrives in the Strategy round. Cleaned in code: 7,730 mislabelled salary credits, 31,324 own transfers, 133 mortgages out of model DTI.</p>
+    <table style="margin-top:3px">
+      <tr><td>Manual review 380k VND · 1.8–4.6 days · 1.6–90.1M VND · 3–24 mo</td><td class="src">Case, Exhibit 2</td></tr>
+      <tr><td>LGD 91% · EAD 72%</td><td class="src">Lending Club, 90k defaulted loans</td></tr>
+      <tr><td>Base PD A 2% / B 5% / C 10%</td><td class="src">≈ 2× Lending Club grades A–C (6-mo)</td></tr>
+      <tr><td>Merchant fee 2% · funding 6%</td><td class="src">below CFPB BNPL 2.49% · above VN deposits 4.6–5.8%</td></tr>
+      <tr><td>Automated decision 50k VND</td><td class="src">team assumption, to confirm with HLBVN</td></tr>
+    </table>
+  </div>
+</section>
+
+</div></body></html>

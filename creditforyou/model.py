@@ -31,7 +31,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler
 
 from .config import DEFAULT_MODEL_PATH, scoring_config
-from .io import load_dataset, normalize_name, parse_amount, parse_percent_ratio, \
+from .io import load_dataset, normalize_name, normalize_series, parse_amount, parse_percent_ratio, \
     parse_term_months, parse_years
 from .lendingclub import assert_no_leakage, build_default_target, target_counts
 from .scoring import annuity_payment
@@ -49,7 +49,7 @@ def _norm_home(s: pd.Series) -> pd.Series:
          "mortgage": "mortgage", "tra_gop": "mortgage",
          "rent": "rent", "thue": "rent", "nha_thue": "rent",
          "family": "family", "o_voi_gia_dinh": "family", "gia_dinh": "family"}
-    return s.astype(str).map(normalize_name).map(lambda x: m.get(x, "other" if x not in ("nan", "none", "") else np.nan))
+    return normalize_series(s).map(lambda x: m.get(x, "other" if x not in ("nan", "none", "") else np.nan))
 
 
 def build_features(df: pd.DataFrame) -> pd.DataFrame:
@@ -69,8 +69,11 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     std_installment = [annuity_payment(a, loan_cfg["annual_interest_rate"], t if t == t else loan_cfg["term_months"])
                        if a == a else np.nan for a, t in zip(amount, term)]
     out["installment_to_income"] = pd.Series(std_installment, index=df.index) / income
+    # Lending Club dti không gồm khoản vay mua nhà -> ưu tiên số nợ đã bỏ vay mua nhà nếu có.
     if "dti" in df:
         out["dti"] = pd.to_numeric(df["dti"], errors="coerce")
+    elif "existing_monthly_debt_ex_mortgage" in df:
+        out["dti"] = pd.to_numeric(df["existing_monthly_debt_ex_mortgage"], errors="coerce") / income
     elif "existing_monthly_debt" in df:
         out["dti"] = pd.to_numeric(df["existing_monthly_debt"], errors="coerce") / income
     else:
@@ -79,9 +82,9 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     out["years_experience"] = np.minimum(yrs, 10)   # Lending Club ghi tối đa "10+ years"
     out["term_months"] = term
     out["home_ownership"] = _norm_home(df["home_ownership"]) if "home_ownership" in df else np.nan
-    out["purpose"] = df["purpose"].astype(str).map(normalize_name).replace({"nan": np.nan, "": np.nan}) \
+    out["purpose"] = normalize_series(df["purpose"]).replace({"nan": np.nan, "": np.nan}) \
         if "purpose" in df else np.nan
-    out["verification_status"] = (df["verification_status"].astype(str).map(normalize_name)
+    out["verification_status"] = (normalize_series(df["verification_status"])
                                   .replace({"nan": np.nan, "": np.nan})
                                   if "verification_status" in df else np.nan)
     for c in BUREAU_NUM:

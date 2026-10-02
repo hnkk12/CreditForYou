@@ -1,0 +1,227 @@
+{
+  "as_of": "2026-10-01",
+  "rows": {
+    "customers": 500,
+    "accounts": 1426,
+    "loans": 233,
+    "transactions": 1669697
+  },
+  "summary_by_severity": {
+    "ok": 10,
+    "high": 5,
+    "medium": 5,
+    "low": 1
+  },
+  "findings": [
+    {
+      "table": "customers",
+      "issue": "customer_id trùng lặp",
+      "count": 0,
+      "total": 500,
+      "share": 0.0,
+      "severity": "ok",
+      "handling": "Kiểm tra mỗi lần chạy; trùng thì dừng (fail-fast)",
+      "impact": ""
+    },
+    {
+      "table": "accounts",
+      "issue": "account_id trùng lặp",
+      "count": 0,
+      "total": 1426,
+      "share": 0.0,
+      "severity": "ok",
+      "handling": "Kiểm tra mỗi lần chạy; trùng thì dừng (fail-fast)",
+      "impact": ""
+    },
+    {
+      "table": "loans",
+      "issue": "loan_id trùng lặp",
+      "count": 0,
+      "total": 233,
+      "share": 0.0,
+      "severity": "ok",
+      "handling": "Kiểm tra mỗi lần chạy; trùng thì dừng (fail-fast)",
+      "impact": ""
+    },
+    {
+      "table": "transactions",
+      "issue": "transaction_id trùng lặp",
+      "count": 0,
+      "total": 1669697,
+      "share": 0.0,
+      "severity": "ok",
+      "handling": "Kiểm tra mỗi lần chạy; trùng thì dừng (fail-fast)",
+      "impact": ""
+    },
+    {
+      "table": "transactions",
+      "issue": "timestamp không đọc được",
+      "count": 0,
+      "total": 1669697,
+      "share": 0.0,
+      "severity": "ok",
+      "handling": "Bỏ dòng, ghi cảnh báo",
+      "impact": ""
+    },
+    {
+      "table": "transactions",
+      "issue": "amount rỗng hoặc bằng 0",
+      "count": 0,
+      "total": 1669697,
+      "share": 0.0,
+      "severity": "ok",
+      "handling": "Bỏ dòng",
+      "impact": ""
+    },
+    {
+      "table": "transactions",
+      "issue": "giao dịch trùng (khách, thời điểm, số tiền, nội dung)",
+      "count": 0,
+      "total": 1669697,
+      "share": 0.0,
+      "severity": "ok",
+      "handling": "Cảnh báo; không tự xoá vì có thể là giao dịch lặp hợp lệ",
+      "impact": ""
+    },
+    {
+      "table": "transactions",
+      "issue": "giao dịch của khách không có trong customers",
+      "count": 0,
+      "total": 1669697,
+      "share": 0.0,
+      "severity": "ok",
+      "handling": "Bỏ qua khi chấm điểm",
+      "impact": ""
+    },
+    {
+      "table": "transactions",
+      "issue": "is_salary=True nhưng không phải lương {'freelance': 4962, 'pension': 2768}",
+      "count": 7730,
+      "total": 28655,
+      "share": 0.2698,
+      "severity": "high",
+      "handling": "Phân loại nguồn thu theo subcategory/từ khoá TRƯỚC cờ is_salary (income.classify_income_type)",
+      "impact": "thu nhập freelance bị coi là lương cố định, đánh giá sai độ ổn định"
+    },
+    {
+      "table": "transactions",
+      "issue": "chuyển khoản giữa các tài khoản của chính khách",
+      "count": 31324,
+      "total": 1669697,
+      "share": 0.0188,
+      "severity": "high",
+      "handling": "Loại khỏi CẢ thu nhập và chi tiêu",
+      "impact": "chuyển tiền sang tiết kiệm bị tính là chi tiêu (đã đo: tỷ lệ duyệt tự động tụt từ 18% xuống 1,6%)"
+    },
+    {
+      "table": "transactions",
+      "issue": "số dư sau giao dịch không liên tục (số dư trước + số tiền ≠ số dư sau)",
+      "count": 1273352,
+      "total": 1668843,
+      "share": 0.763,
+      "severity": "high",
+      "handling": "KHÔNG dùng số dư (avg/min balance) để ra quyết định; chỉ dùng dòng tiền",
+      "impact": "Các đặc trưng dựa trên số dư không đáng tin"
+    },
+    {
+      "table": "transactions",
+      "issue": "phí thấu chi xuất hiện ở trung vị 93% số tháng của mỗi khách",
+      "count": 111363,
+      "total": 1669697,
+      "share": 0.0667,
+      "severity": "medium",
+      "handling": "Chỉ giữ làm chỉ số tham khảo, KHÔNG làm quy tắc",
+      "impact": "Gần như ai cũng có -> không phân biệt được rủi ro trong dataset này"
+    },
+    {
+      "table": "customers",
+      "issue": "monthly_income > 0 nhưng KHÔNG có khoản thu nhập nào trong 12 tháng gần nhất",
+      "count": 31,
+      "total": 500,
+      "share": 0.062,
+      "severity": "medium",
+      "handling": "Thu nhập ước tính = 0 -> không cấp hạn mức (không tin thu nhập tự khai đã cũ)",
+      "impact": "Đúng về rủi ro; làm giảm chỉ số 'độ chính xác thu nhập' khi so với hồ sơ"
+    },
+    {
+      "table": "customers",
+      "issue": "age lệch birth_date > 1 năm",
+      "count": 0,
+      "total": 500,
+      "share": 0.0,
+      "severity": "ok",
+      "handling": "Dùng cột age",
+      "impact": ""
+    },
+    {
+      "table": "accounts",
+      "issue": "opened_at = ngày xuất dữ liệu (2026-10-01) -> nghi là giá trị mặc định",
+      "count": 138,
+      "total": 1426,
+      "share": 0.0968,
+      "severity": "medium",
+      "handling": "Thâm niên lấy theo customers.customer_since, không theo ngày mở tài khoản",
+      "impact": ""
+    },
+    {
+      "table": "cards",
+      "issue": "thẻ 'active' nhưng đã hết hạn",
+      "count": 717,
+      "total": 901,
+      "share": 0.7958,
+      "severity": "low",
+      "handling": "Không dùng bảng cards cho quyết định",
+      "impact": ""
+    },
+    {
+      "table": "loans",
+      "issue": "khoản vay mua nhà trong nợ đang có",
+      "count": 133,
+      "total": 233,
+      "share": 0.5708,
+      "severity": "high",
+      "handling": "Tính đủ trong khả năng chi trả; BỎ khỏi dti đưa vào mô hình PD (giống định nghĩa dti Lending Club)",
+      "impact": "dti của C0000001 thành 54% (ngoài phân phối Lending Club, 99% < 40%) và PD bị đẩy từ 11,5% lên 25,3%"
+    },
+    {
+      "table": "loans",
+      "issue": "monthly_payment lệch > 5% so với công thức trả góp",
+      "count": 0,
+      "total": 233,
+      "share": 0.0,
+      "severity": "ok",
+      "handling": "Dùng monthly_payment như hợp đồng",
+      "impact": ""
+    },
+    {
+      "table": "loans",
+      "issue": "không có lịch sử trả đúng hạn / trễ hạn",
+      "count": 233,
+      "total": 233,
+      "share": 1.0,
+      "severity": "medium",
+      "handling": "Tắt thành phần 'lịch sử trả nợ' và chuẩn hoá trọng số còn lại",
+      "impact": "Điểm thực tế chỉ gồm 4 thành phần"
+    },
+    {
+      "table": "lending_club",
+      "issue": "khoản vay chưa có kết cục (Current, Late, In Grace...) hoặc dòng tổng kết cuối file",
+      "count": 305087,
+      "total": 753566,
+      "share": 0.4049,
+      "severity": "medium",
+      "handling": "Loại khỏi tập train; chỉ giữ Fully Paid (0) và Charged Off/Default (1)",
+      "impact": ""
+    },
+    {
+      "table": "lending_club",
+      "issue": "cột phát sinh sau giải ngân / do Lending Club định giá (rò rỉ dữ liệu)",
+      "count": 1,
+      "total": 1,
+      "share": 1.0,
+      "severity": "high",
+      "handling": "Chặn bằng assert_no_leakage; tính lại trả góp bằng lãi suất cố định",
+      "impact": "AUC ảo, mô hình học lại quyết định của chính Lending Club"
+    }
+  ]
+}

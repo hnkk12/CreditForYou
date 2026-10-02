@@ -1,0 +1,17 @@
+{
+  "factors": {
+    "salary": 0.8871266775961554,
+    "pension": 0.8863882775222457,
+    "self_employed": 0.532784345389268,
+    "other": 1.0
+  },
+  "n_customers": {
+    "salary": 392,
+    "pension": 48,
+    "self_employed": 26,
+    "other": 0
+  },
+  "method": "median(verified_income / gross_income_of_type) trên khách có >=95% thu nhập từ 1 loại",
+  "source": "customers.monthly_income (đóng vai nhóm khách đã xác minh thu nhập)",
+  "fitted_at": "2026-10-01T12:52:44"
+}

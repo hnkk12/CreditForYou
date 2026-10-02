@@ -122,6 +122,8 @@ def evaluate(tx_path, applicants_path=None, model_path=DEFAULT_MODEL_PATH, dayfi
         warnings.append(f"Chưa có mô hình ML ({model_path.name}) -> component PD bị vô hiệu hóa và trọng số "
                         "còn lại được chuẩn hóa. Chạy `train` trước.")
 
+    _apply_pd_policy(df, warnings)
+
     rows = []
     for rec in df.to_dict("records"):
         t0 = time.perf_counter()
@@ -136,47 +138,55 @@ def evaluate(tx_path, applicants_path=None, model_path=DEFAULT_MODEL_PATH, dayfi
     return out, warnings, model
 
 
-def evaluate_synthetic_customer(customer_ids, requested_amount, term_months, purpose,
-                                years_experience, home_ownership, model_path=DEFAULT_MODEL_PATH,
-                                data_dir=None):
-    """Integrated ISB demo flow. Ground-truth monthly_income is never loaded."""
+def _apply_pd_policy(df: pd.DataFrame, warnings: list) -> None:
+    """Giữ PD làm 'challenger' (cột pd_challenger) và chỉ đưa vào điểm khi scoring.use_ml_pd = true."""
+    df["pd_challenger"] = df["pd"]
+    if not scoring_config()["scoring"].get("use_ml_pd", True):
+        df["pd"] = np.nan
+        if df["pd_challenger"].notna().any():
+            warnings.append("PD (Lending Club) chỉ chạy song song để so sánh, không vào điểm/quyết định "
+                            "(scoring.use_ml_pd = false).")
+
+
+def build_isb_profiles(customer_ids=None, data_dir=None):
+    """Hồ sơ dòng tiền của khách ISB: thu nhập theo loại nguồn thu, chi phí bắt buộc, nợ đang có,
+    thâm niên. KHÔNG đọc customers.monthly_income (đáp án)."""
     from pathlib import Path
     from .config import SYNTHETIC_DATA_DIR
     from .datasets import existing_debt_by_customer, load_synthetic_table, synthetic_paths
 
     data_dir = Path(data_dir) if data_dir else SYNTHETIC_DATA_DIR
-    wanted = {str(v) for v in customer_ids}
-    profiles = load_synthetic_table("customers", data_dir,
-                                    usecols=["customer_id", "age", "profession", "customer_since"])
-    profiles = profiles[profiles["customer_id"].astype(str).isin(wanted)].copy()
-    if profiles.empty:
-        raise KeyError(f"Không tìm thấy khách hàng {sorted(wanted)}")
-    income, warnings = run_income(synthetic_paths(data_dir)["transactions"], customers=sorted(wanted))
+    header = set(pd.read_csv(synthetic_paths(data_dir)["customers"], nrows=0).columns)
+    cols = [c for c in ("customer_id", "age", "profession", "profile", "customer_segment", "customer_since")
+            if c in header]
+    profiles = load_synthetic_table("customers", data_dir, usecols=cols)
+    profiles["customer_id"] = profiles["customer_id"].astype(str)
+    if customer_ids is not None:
+        wanted = {str(v) for v in customer_ids}
+        profiles = profiles[profiles["customer_id"].isin(wanted)].copy()
+        if profiles.empty:
+            raise KeyError(f"Không tìm thấy khách hàng {sorted(wanted)}")
+    income, warnings = run_income(synthetic_paths(data_dir)["transactions"],
+                                  customers=None if customer_ids is None else sorted(profiles["customer_id"]))
     debt = existing_debt_by_customer(data_dir)
     df = profiles.merge(income, on="customer_id", how="left", validate="one_to_one")
     df = df.merge(debt, on="customer_id", how="left")
-    df["existing_monthly_debt"] = df["existing_monthly_debt"].fillna(0.0)
-    df["requested_amount"] = float(requested_amount)
-    df["term_months"] = float(term_months)
-    df["purpose"] = purpose
-    df["years_experience"] = float(years_experience)
-    df["home_ownership"] = home_ownership
-    # Transaction-estimated income is explicitly not source-verified.
-    df["verification_status"] = "not_verified"
-    df["annual_inc_for_model"] = df["estimated_monthly_income"] * 12
-    customer_since = pd.to_datetime(df["customer_since"], errors="coerce")
+    df["has_credit_history"] = df["existing_monthly_debt"].notna() | df["customer_id"].isin(
+        load_synthetic_table("loans", data_dir, usecols=["customer_id"])["customer_id"].astype(str))
+    for col in ("existing_monthly_debt", "existing_monthly_debt_ex_mortgage", "months_of_data",
+                "estimated_monthly_income", "gross_monthly_income", "conservative_cash_income",
+                "avg_monthly_committed_expense", "detected_monthly_debt"):
+        if col in df:
+            df[col] = df[col].fillna(0.0)
+    # Nợ theo hợp đồng (loans.csv) và nợ quan sát trong sao kê: lấy số lớn hơn, không cộng dồn (tránh tính 2 lần)
+    df["debt_service_monthly"] = np.maximum(df["existing_monthly_debt"], df["detected_monthly_debt"])
+    customer_since = pd.to_datetime(df.get("customer_since"), errors="coerce")
     as_of = pd.to_datetime(df["last_month"] + "-28", errors="coerce")
     df["financial_tenure_years"] = ((as_of - customer_since).dt.days / 365.25).clip(lower=0)
-    loan_cfg = scoring_config()["loan_defaults"]
-    df["monthly_installment"] = [annuity_payment(requested_amount, loan_cfg["annual_interest_rate"], term_months)] * len(df)
-    model = load_model(model_path)
-    if model is None:
-        df["pd"] = np.nan
-        warnings.append("Chưa có model PD; component ML bị vô hiệu hóa.")
-    else:
-        features = build_features(df.assign(monthly_income=df["estimated_monthly_income"]))
-        df["pd"] = predict_pd(model, features)
-    df["model_version"] = model.get("model_version", model.get("model_name")) if model else None
+    return df, warnings
+
+
+def _score_rows(df: pd.DataFrame) -> pd.DataFrame:
     rows = []
     for rec in df.to_dict("records"):
         started = time.perf_counter()
@@ -187,4 +197,58 @@ def evaluate_synthetic_customer(customer_ids, requested_amount, term_months, pur
     out = pd.concat([df.reset_index(drop=True), pd.DataFrame(rows)], axis=1)
     for col in ("score_notes", "decision_reasons", "reason_codes"):
         out[col] = out[col].map(" | ".join)
-    return out, warnings, model
+    return out
+
+
+def _predict_pd_for(df, model_path, warnings, requested_amount, term_months):
+    model = load_model(model_path)
+    if model is None:
+        df["pd"] = np.nan
+        warnings.append("Chưa có model PD; component ML bị vô hiệu hóa.")
+    else:
+        feats = df.assign(requested_amount=float(requested_amount), term_months=float(term_months),
+                          monthly_income=df["estimated_monthly_income"])
+        df["pd"] = predict_pd(model, build_features(feats))
+    df["model_version"] = model.get("model_version", model.get("model_name")) if model else None
+    _apply_pd_policy(df, warnings)
+    return model
+
+
+def evaluate_synthetic_customer(customer_ids, requested_amount, term_months, purpose,
+                                years_experience, home_ownership, model_path=DEFAULT_MODEL_PATH,
+                                data_dir=None):
+    """Chấm 1 khoản vay cụ thể cho khách ISB (dùng cho app / so sánh). Ground truth không được đọc."""
+    df, warnings = build_isb_profiles(customer_ids, data_dir)
+    df["requested_amount"] = float(requested_amount)
+    df["term_months"] = float(term_months)
+    df["purpose"] = purpose
+    df["years_experience"] = float(years_experience)
+    df["home_ownership"] = home_ownership
+    df["verification_status"] = "not_verified"   # thu nhập ước tính từ giao dịch, chưa xác minh giấy tờ
+    df["annual_inc_for_model"] = df["estimated_monthly_income"] * 12
+    loan_cfg = scoring_config()["loan_defaults"]
+    df["monthly_installment"] = annuity_payment(requested_amount, loan_cfg["annual_interest_rate"], term_months)
+    model = _predict_pd_for(df, model_path, warnings, requested_amount, term_months)
+    return _score_rows(df), warnings, model
+
+
+def preapprove_limits(customer_ids=None, model_path=DEFAULT_MODEL_PATH, data_dir=None,
+                      years_experience=None, home_ownership="rent", purpose="major_purchase"):
+    """BƯỚC [A] - cấp trước hạn mức trả góp tại điểm bán cho từng khách (chạy theo lô, ngoài giờ mua hàng).
+    Điểm/nhóm trả lời 'khách tốt đến đâu'; hạn mức trả lời 'cho vay tối đa bao nhiêu'."""
+    from .limit import compute_limits
+    df, warnings = build_isb_profiles(customer_ids, data_dir)
+    pos = scoring_config()["pos_limit"]
+    # Chấm điểm chất lượng khách độc lập với khoản vay: chỉ tính nợ đang có, chưa cộng khoản mới.
+    df["monthly_installment"] = 0.0
+    df["existing_monthly_debt"] = df["debt_service_monthly"]
+    df["purpose"] = purpose
+    df["home_ownership"] = home_ownership
+    df["verification_status"] = "not_verified"
+    if years_experience is not None:
+        df["years_experience"] = float(years_experience)
+    # khoản mua tham chiếu cho PD challenger, quy về đơn vị tiền của dataset (cùng đơn vị với thu nhập)
+    reference = pos["tier_caps"]["C"] / float(pos.get("fx_dataset_to_vnd", 1.0))
+    model = _predict_pd_for(df, model_path, warnings, reference, pos["term_months"])
+    scored = _score_rows(df)
+    return compute_limits(scored), warnings, model

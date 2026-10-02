@@ -86,7 +86,10 @@ if submitted:
 
     st.subheader("Credit risk and final decision")
     r1, r2, r3, r4 = st.columns(4)
-    r1.metric("Model-predicted default probability", f"{row['pd_used']:.1%}" if pd.notna(row["pd_used"]) else "Unavailable")
+    pd_value = row["pd_used"] if pd.notna(row["pd_used"]) else row.get("pd_challenger")
+    pd_label = ("Model-predicted default probability" if pd.notna(row["pd_used"])
+                else "PD challenger (Lending Club, not used in decision)")
+    r1.metric(pd_label, f"{pd_value:.1%}" if pd.notna(pd_value) else "Unavailable")
     r2.metric("Credit score", f"{row['credit_score']:.2f}/100")
     r3.metric("Tier", row["tier"])
     r4.metric("Recommendation", row["decision"])

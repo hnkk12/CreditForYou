@@ -6,12 +6,13 @@ row level.  This module only validates/loads each population independently.
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Iterable
 
 import pandas as pd
 
-from .config import LENDING_CLUB_PATH, SYNTHETIC_DATA_DIR
+from .config import LENDING_CLUB_PATH, PROCESSED_DIR, SYNTHETIC_DATA_DIR, scoring_config
 
 SYNTHETIC_REQUIRED = {
     "customers": {"customer_id", "monthly_income"},
@@ -74,11 +75,62 @@ def iter_transactions(
             yield chunk
 
 
+def transaction_cache_path(csv_path: Path) -> Path:
+    return PROCESSED_DIR / f"{Path(csv_path).stem}.parquet"
+
+
+def _cache_meta(csv_path: Path) -> dict:
+    stat = Path(csv_path).stat()
+    return {"source": str(Path(csv_path).resolve()), "size": stat.st_size, "mtime": stat.st_mtime,
+            "columns": TRANSACTION_COLUMNS}
+
+
+def transaction_cache_is_fresh(csv_path: Path) -> bool:
+    cache = transaction_cache_path(csv_path)
+    meta_path = cache.with_suffix(".meta.json")
+    if not cache.exists() or not meta_path.exists():
+        return False
+    try:
+        return json.loads(meta_path.read_text(encoding="utf-8")) == _cache_meta(csv_path)
+    except (OSError, ValueError):
+        return False
+
+
+def build_transaction_cache(csv_path: Path | None = None, log=print) -> Path:
+    """Convert the transaction CSV to parquet sorted by customer_id (one-off, ~1 minute).
+
+    Row groups are customer-sorted so reading one customer only touches a few row groups
+    instead of scanning the 390 MB CSV (~12 s -> < 1 s).
+    """
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
+    csv_path = Path(csv_path) if csv_path else synthetic_paths()["transactions"]
+    cache = transaction_cache_path(csv_path)
+    cache.parent.mkdir(parents=True, exist_ok=True)
+    log(f"Đang tạo cache giao dịch {cache.name} từ {csv_path.name} (chỉ chạy 1 lần)...")
+    df = pd.concat(iter_transactions(path=csv_path), ignore_index=True)
+    df["customer_id"] = df["customer_id"].astype(str)
+    df = df.sort_values(["customer_id", "timestamp"], kind="stable").reset_index(drop=True)
+    table = pa.Table.from_pandas(df, preserve_index=False)
+    pq.write_table(table, cache, row_group_size=20_000, compression="snappy")
+    cache.with_suffix(".meta.json").write_text(json.dumps(_cache_meta(csv_path)), encoding="utf-8")
+    log(f"Đã tạo cache: {len(df):,} giao dịch -> {cache}")
+    return cache
+
+
 def load_transactions(
     path: Path | None = None,
     customers: Iterable[str] | None = None,
     chunksize: int = 200_000,
 ) -> pd.DataFrame:
+    path = Path(path) if path else synthetic_paths()["transactions"]
+    if transaction_cache_is_fresh(path):
+        filters = None if customers is None else [("customer_id", "in", sorted({str(v) for v in customers}))]
+        df = pd.read_parquet(transaction_cache_path(path), filters=filters)
+        if not df.empty:
+            return df.reset_index(drop=True)
+        return pd.DataFrame(columns=TRANSACTION_COLUMNS)
     chunks = list(iter_transactions(path=path, customers=customers, chunksize=chunksize))
     if not chunks:
         return pd.DataFrame(columns=TRANSACTION_COLUMNS)
@@ -86,12 +138,21 @@ def load_transactions(
 
 
 def existing_debt_by_customer(data_dir: Path = SYNTHETIC_DATA_DIR) -> pd.DataFrame:
-    """Sum contractual payment for active loans; closed loans contribute zero."""
+    """Sum contractual payment for active loans; closed loans contribute zero.
+
+    ``existing_monthly_debt``: every active loan (used for affordability guardrails).
+    ``existing_monthly_debt_ex_mortgage``: excludes mortgage types, matching the Lending Club
+    ``dti`` definition (used only as the PD-model feature).
+    """
+    excluded_types = {str(t).lower() for t in scoring_config()["model"]["dti_exclude_loan_types"]}
     loans = load_synthetic_table("loans", data_dir)
     active = loans[loans["status"].astype(str).str.lower().isin({"active", "outstanding"})].copy()
     active["monthly_payment"] = pd.to_numeric(active["monthly_payment"], errors="coerce").fillna(0.0)
-    return (active.groupby("customer_id", as_index=False)["monthly_payment"].sum()
-            .rename(columns={"monthly_payment": "existing_monthly_debt"}))
+    loan_type = active["loan_type"].astype(str).str.lower() if "loan_type" in active else pd.Series("", index=active.index)
+    active["non_mortgage_payment"] = active["monthly_payment"].where(~loan_type.isin(excluded_types), 0.0)
+    return (active.groupby("customer_id", as_index=False)[["monthly_payment", "non_mortgage_payment"]].sum()
+            .rename(columns={"monthly_payment": "existing_monthly_debt",
+                             "non_mortgage_payment": "existing_monthly_debt_ex_mortgage"}))
 
 
 def validate_synthetic_joins(data_dir: Path = SYNTHETIC_DATA_DIR) -> dict:

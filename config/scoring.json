@@ -1,43 +1,166 @@
 {
   "_note": "Tham số nghiệp vụ của CreditForYou. Tiền tệ phải nhất quán trong mỗi hồ sơ; ISB demo dùng USD.",
-
   "income": {
     "_note": "BƯỚC #2 - Ước tính thu nhập từ giao dịch",
     "lookback_months": 12,
     "trim_partial_months": true,
-    "high_stability_threshold": 0.80,
-    "low_stability_method": "haircut",
-    "_low_stability_note": "haircut: thu nhập = TB × (floor + (1-floor) × độ ổn định) -> giảm tối đa 50%. percentile: lấy phân vị (dễ ra 0 nếu có vài tháng không có tiền vào).",
-    "haircut_floor": 0.5,
-    "low_stability_percentile": 25,
+    "high_stability_threshold": 0.8,
     "min_months_required": 3,
-    "conservative_base": 0.85,
-    "stability_adjustment": 0.15,
     "recurring_min_months": 2,
-    "estimated_income_positive_percentile": 10,
     "transfer_confidence_penalty": 0.5,
     "confidence_by_months": [
-      {"min_months": 9, "confidence": 0.95},
-      {"min_months": 6, "confidence": 0.95},
-      {"min_months": 3, "confidence": 0.65},
-      {"min_months": 0, "confidence": 0.35}
+      {
+        "min_months": 6,
+        "confidence": 0.95
+      },
+      {
+        "min_months": 3,
+        "confidence": 0.65
+      },
+      {
+        "min_months": 0,
+        "confidence": 0.35
+      }
     ],
     "exclude_inflow_keywords": [
-      "chuyen khoan noi bo", "chuyen tien tu tk", "tu tai khoan cua toi", "own account", "internal transfer",
-      "giai ngan", "disbursement", "loan", "khoan vay",
-      "hoan tien", "refund", "reversal", "hoan tra",
-      "tiet kiem dao han", "tat toan", "saving maturity"
+      "chuyen khoan noi bo",
+      "chuyen tien tu tk",
+      "tu tai khoan cua toi",
+      "own account",
+      "internal transfer",
+      "giai ngan",
+      "disbursement",
+      "loan",
+      "khoan vay",
+      "hoan tien",
+      "refund",
+      "reversal",
+      "hoan tra",
+      "tiet kiem dao han",
+      "tat toan",
+      "saving maturity"
     ],
-    "exclude_inflow_categories": ["transfer_internal", "loan_disbursement", "refund", "savings_withdrawal"],
+    "exclude_inflow_categories": [
+      "transfer_internal",
+      "loan_disbursement",
+      "refund",
+      "savings_withdrawal"
+    ],
     "debt_payment_keywords": [
-      "tra no", "tra gop", "thanh toan khoan vay", "thanh toan the tin dung", "tra lai vay",
-      "loan repayment", "loan payment", "credit card payment", "installment", "emi"
+      "auto loan",
+      "consumer loan",
+      "credit card payment",
+      "emi",
+      "installment",
+      "loan payment",
+      "loan repayment",
+      "mortgage",
+      "thanh toan khoan vay",
+      "thanh toan the tin dung",
+      "tra gop",
+      "tra lai vay",
+      "tra no",
+      "vay mua nha",
+      "vay mua xe"
     ],
-    "excluded_status": ["failed", "fail", "cancelled", "canceled", "reversed", "declined", "rejected", "that bai", "huy"]
+    "excluded_status": [
+      "failed",
+      "fail",
+      "cancelled",
+      "canceled",
+      "reversed",
+      "declined",
+      "rejected",
+      "that bai",
+      "huy"
+    ],
+    "_high_stability_note": "Chỉ dùng trong báo cáo KPI để tách nhóm thu nhập ổn định / bất ổn.",
+    "_estimate_note": "estimated_monthly_income = tổng theo loại nguồn thu (mức gộp × hệ số gộp->ròng trong config/income_calibration.json) -> dùng cho chấm điểm/DTI. conservative_cash_income = thu nhập gộp × (conservative_floor + (1 - conservative_floor) × độ ổn định) -> dùng cho khả năng chi trả/hạn mức.",
+    "_confidence_note": "Mức theo số tháng, sau đó nhân với mật độ giao dịch thu nhập và phạt tỷ lệ tiền vào từ chuyển khoản.",
+    "income_type_keywords": {
+      "salary": [
+        "salary",
+        "payroll",
+        "wage",
+        "wages",
+        "direct dep employer",
+        "luong",
+        "tien luong"
+      ],
+      "pension": [
+        "pension",
+        "social security",
+        "retirement",
+        "annuity",
+        "luong huu",
+        "tro cap huu tri"
+      ],
+      "self_employed": [
+        "freelance",
+        "invoice",
+        "business income",
+        "revenue",
+        "gig",
+        "self employed",
+        "doanh thu",
+        "ban hang",
+        "grab",
+        "shopee",
+        "lazada",
+        "tiktok shop"
+      ]
+    },
+    "income_type_level": {
+      "salary": "median_positive",
+      "pension": "median_positive",
+      "self_employed": "mean",
+      "other": "mean"
+    },
+    "conservative_floor": 0.5,
+    "committed_expense": {
+      "_note": "Chi phí bắt buộc (không gồm trả nợ - đã tính riêng). Phần còn lại (mua sắm, du lịch, ăn ngoài) là chi tiêu tuỳ ý.",
+      "keywords": [
+        "rent",
+        "home insurance",
+        "groceries",
+        "supermarket",
+        "convenience",
+        "bakery",
+        "utilities",
+        "electricity",
+        "water",
+        "gas",
+        "telecom",
+        "mobile",
+        "internet",
+        "health",
+        "pharmacy",
+        "doctor",
+        "dentist",
+        "health insurance",
+        "fuel",
+        "auto insurance",
+        "transit",
+        "garde enfant",
+        "childcare",
+        "tien nha",
+        "dien nuoc",
+        "di cho",
+        "hoc phi"
+      ]
+    },
+    "risk_fee_keywords": [
+      "overdraft fee",
+      "overdraft",
+      "nsf",
+      "returned payment",
+      "late fee",
+      "phi thau chi",
+      "phat tre han"
+    ]
   },
-
   "scoring": {
-    "_note": "BƯỚC #5 - Thang 100 điểm, 5 thành phần",
+    "_note": "BƯỚC #5 - Thang 100 điểm, 5 thành phần. Thành phần nào thiếu dữ liệu sẽ bị tắt và trọng số các thành phần còn lại được chuẩn hoá về 100 (không gán giá trị trung tính).",
     "weights": {
       "income_stability": 25,
       "debt_to_income": 25,
@@ -46,36 +169,200 @@
       "ml_probability": 15
     },
     "experience_full_years": 30,
-    "no_history_repayment_ratio": 0.5,
-    "_no_history_note": "Khách chưa từng vay (thin-file) -> coi như 50% (trung tính) thay vì 0 điểm, để không phạt nhóm khách mục tiêu.",
-    "dti_includes_existing_debt": true
+    "use_ml_pd": false,
+    "_use_ml_pd_note": "false: PD Lending Club chỉ chạy song song để so sánh (challenger), KHÔNG vào điểm/quyết định, vì khác quần thể & sản phẩm. Bật true khi có nhãn vỡ nợ thật của sản phẩm POP."
   },
-
+  "model": {
+    "_note": "Lending Club tính dti KHÔNG gồm khoản vay mua nhà -> khi suy luận PD cũng phải bỏ các loại vay này.",
+    "dti_exclude_loan_types": [
+      "credit_immobilier",
+      "mortgage",
+      "home_loan",
+      "vay_mua_nha"
+    ]
+  },
   "tiers": [
-    {"tier": "A", "min_score": 80, "label": "Rất tốt",           "decision": "AUTO_APPROVE",  "rate_range": [9, 10],  "max_amount_ratio": null},
-    {"tier": "B", "min_score": 60, "label": "Tốt",               "decision": "AUTO_APPROVE",  "rate_range": [11, 13], "max_amount_ratio": null},
-    {"tier": "C", "min_score": 40, "label": "Rủi ro trung bình", "decision": "MANUAL_REVIEW", "rate_range": [14, 16], "max_amount_ratio": 0.8},
-    {"tier": "D", "min_score": 0,  "label": "Rủi ro cao",        "decision": "REJECT",        "rate_range": null,     "max_amount_ratio": 0}
+    {
+      "tier": "A",
+      "min_score": 80,
+      "label": "Rất tốt",
+      "decision": "AUTO_APPROVE",
+      "rate_range": [
+        9,
+        10
+      ],
+      "max_amount_ratio": null
+    },
+    {
+      "tier": "B",
+      "min_score": 60,
+      "label": "Tốt",
+      "decision": "AUTO_APPROVE",
+      "rate_range": [
+        11,
+        13
+      ],
+      "max_amount_ratio": null
+    },
+    {
+      "tier": "C",
+      "min_score": 40,
+      "label": "Rủi ro trung bình",
+      "decision": "MANUAL_REVIEW",
+      "rate_range": [
+        14,
+        16
+      ],
+      "max_amount_ratio": 0.8
+    },
+    {
+      "tier": "D",
+      "min_score": 0,
+      "label": "Rủi ro cao",
+      "decision": "REJECT",
+      "rate_range": null,
+      "max_amount_ratio": 0
+    }
   ],
-
   "business_rules": {
     "_note": "Quy tắc chặn/đẩy review - chạy TRƯỚC khi xếp hạng. null = tắt rule.",
     "min_age": 18,
     "max_age": 65,
-    "max_dti_hard": 0.70,
-    "max_expense_income_ratio_hard": 1.20,
+    "max_dti_hard": 0.7,
+    "max_expense_income_ratio_hard": 1.2,
     "min_income_monthly": null,
-    "low_confidence_to_review": 0.70,
+    "low_confidence_to_review": 0.7,
     "max_pd_auto_approve": 0.25,
-    "max_installment_income_ratio_auto": 0.30,
+    "max_installment_income_ratio_auto": 0.3,
     "max_post_loan_debt_ratio_auto": 0.45,
-    "max_expense_income_ratio_auto": 0.90,
+    "max_expense_income_ratio_auto": 0.9,
     "_guardrail_note": "Prototype conservative guardrails: auto-approval requires requested installment <=30%, total post-loan debt service <=45%, expenses <=90% of estimated income, PD <=25%, and confidence >=70%. Hard rejection remains at total debt service >70% or expenses >120%. These are configurable research assumptions, not validated bank policy."
   },
-
   "loan_defaults": {
     "_note": "Dùng khi hồ sơ chỉ có số tiền vay mà không có khoản trả hàng tháng",
     "annual_interest_rate": 0.12,
     "term_months": 36
+  },
+  "pos_limit": {
+    "_note": "Hạn mức trả góp tại điểm bán (POP), tính bằng VND theo đề (Exhibit 2: khoản vay 1.600.000 - 90.100.000 VND, kỳ hạn 3/6/9/12/18/24 tháng). Giả định nghiên cứu, cần hiệu chỉnh khi pilot.",
+    "term_months": 6,
+    "max_term_months": 12,
+    "annual_rate": 0.18,
+    "disposable_share": 0.5,
+    "max_new_installment_to_income": 0.2,
+    "max_total_debt_to_income": 0.5,
+    "tier_caps": {
+      "A": 90000000,
+      "B": 60000000,
+      "C": 30000000,
+      "D": 0
+    },
+    "tier_income_multiple": {
+      "A": 1.5,
+      "B": 1.0,
+      "C": 0.5,
+      "D": 0
+    },
+    "thin_file_cap": 30000000,
+    "_thin_file_note": "Khách chưa có khoản vay nào trong hệ thống: bắt đầu với trần thấp, nâng dần theo lịch sử trả (graduation).",
+    "reduced_limit_factor": 0.5,
+    "_reduced_note": "Hồ sơ vướng guardrail mềm (vd. chi tiêu cao, PD cao) vẫn được cấp NGAY nhưng hạn mức × hệ số này - không đẩy sang người duyệt tại quầy.",
+    "offline_review_min_confidence": 0.5,
+    "min_limit": 1600000,
+    "graduation": {
+      "on_time_installments_required": 3,
+      "step_up": 0.25,
+      "freeze_on_dpd": 30
+    },
+    "offline_review_segments": [
+      "VULNERABLE"
+    ],
+    "_segments_note": "Cho vay có trách nhiệm: khách được ngân hàng gắn nhãn dễ tổn thương tài chính không được cấp tự động; chuyên viên tư vấn/xem xét ngoài giờ mua hàng.",
+    "currency": "VND",
+    "fx_dataset_to_vnd": 25000,
+    "_fx_note": "Dataset mô phỏng hiện tại tính bằng USD -> quy đổi 25.000 VND/USD. Dataset chính thức bằng VND thì đặt 1.",
+    "allowed_terms": [
+      3,
+      6,
+      9,
+      12,
+      18,
+      24
+    ],
+    "_max_term_note": "Đề cho phép tới 24 tháng; chính sách thận trọng giới hạn 12 tháng cho khách thiếu lịch sử tín dụng.",
+    "_tier_caps_note": "Trần A = mức vay tối đa trong đề (~90,1 triệu VND); B, C, khách mới thấp hơn để bắt đầu nhỏ.",
+    "_min_limit_note": "Mức vay tối thiểu trong đề (Exhibit 2)."
+  },
+  "economics": {
+    "_note": "GIẢ ĐỊNH cho bài toán kinh tế danh mục POP, đơn vị VND. Hiệu chỉnh khi pilot.",
+    "annual_utilization": 1.5,
+    "_annual_utilization_note": "Mỗi năm khách dùng hết hạn mức ~1,5 lần (khoản 6 tháng, trả xong lại mua tiếp).",
+    "avg_ticket_share_of_limit": 0.6,
+    "_avg_ticket_note": "Đơn hàng trung bình = 60% hạn mức -> số khoản vay/năm = utilization / 0,6.",
+    "merchant_discount_rate": 0.02,
+    "_mdr_note": "Thận trọng so với thị trường: CFPB (2022) - phí chiết khấu đối tác BNPL bình quân 2,49% năm 2021, 3,39% năm 2019.",
+    "cost_of_funds": 0.06,
+    "lgd": 0.91,
+    "_lgd_note": "Theo dữ liệu: Lending Club, 90.150 khoản vỡ nợ, LGD bình quân theo dư nợ = 91,0% (1 - thu hồi ròng / dư nợ còn lại).",
+    "ead_share": 0.72,
+    "_ead_note": "Theo dữ liệu: Lending Club, dư nợ còn lại lúc vỡ nợ = 71,8% số tiền giải ngân (khoản 36-60 tháng; với khoản 6 tháng là thận trọng).",
+    "capital_ratio": 0.1,
+    "_capital_note": "Vốn chủ phân bổ = 10% dư nợ (tỷ lệ an toàn vốn tối thiểu 8% + đệm), trọng số rủi ro 100%.",
+    "cost_per_loan_automated": 50000,
+    "cost_per_manual_review": 380000,
+    "_cost_note": "Thủ công: 380.000 VND/hồ sơ theo đề (Exhibit 2, 'Internal Processing Cost Benchmark'). Tự động: giả định 50.000 VND/quyết định (eKYC, tra cứu, hạ tầng) - cần xác nhận với HLBVN.",
+    "pd_scenarios": {
+      "_note": "PD mỗi khoản 6 tháng. 'co_so' = thận trọng ~2× tỷ lệ vỡ nợ Lending Club hạng A/B/C (36 tháng: 5,8/12,9/20,6% -> 6 tháng 1,0/2,3/3,8%) và khớp KPI bản ý tưởng (A < 2%, B < 5%). Đối chiếu: CFPB - tỷ lệ xoá nợ BNPL 3,8% (2021).",
+      "co_so": {
+        "A": 0.02,
+        "B": 0.05,
+        "C": 0.1
+      },
+      "cang_thang_x2": {
+        "A": 0.04,
+        "B": 0.1,
+        "C": 0.2
+      },
+      "nghiem_trong_x3": {
+        "A": 0.06,
+        "B": 0.15,
+        "C": 0.3
+      }
+    },
+    "lending_club_reference_term_months": 36,
+    "_lc_note": "Kịch bản 'theo_PD_Lending_Club': PD challenger (vỡ nợ cả đời khoản ~36 tháng) quy về 6 tháng: 1-(1-PD)^(6/36).",
+    "_cof_note": "Thận trọng: lãi tiền gửi 12 tháng tại Việt Nam năm 2025 khoảng 4,6-5,8%; làm tròn lên 6%.",
+    "benchmarks": {
+      "cfpb_bnpl_merchant_fee_2021": 0.0249,
+      "cfpb_bnpl_chargeoff_rate_2021": 0.038,
+      "lending_club_lgd": 0.91,
+      "lending_club_ead_share": 0.718,
+      "lending_club_pd6m_by_grade": {
+        "A": 0.0099,
+        "B": 0.0227,
+        "C": 0.0377
+      },
+      "vn_12m_deposit_rate_2025": "4.6-5.8%"
+    }
+  },
+  "case_segments": {
+    "_note": "Cơ cấu hồ sơ đến theo đề (Exhibit 2). Dataset mô phỏng có cơ cấu khác (vd. 63% chưa có lịch sử vay) -> mọi tỷ lệ 'toàn bộ' được tính lại theo trọng số này. Gán khách: freelancer/thu nhập tự doanh -> gig; entrepreneur -> online merchant; student chưa có lịch sử vay -> first-time; còn lại theo lịch sử vay.",
+    "weights": {
+      "salaried_with_credit": 0.355,
+      "salaried_no_credit": 0.205,
+      "gig_platform": 0.15,
+      "online_merchant": 0.145,
+      "first_time": 0.145
+    },
+    "labels": {
+      "salaried_with_credit": "Salaried, with credit",
+      "salaried_no_credit": "Salaried, no credit",
+      "gig_platform": "Gig / platform workers",
+      "online_merchant": "Online merchants (MSME)",
+      "first_time": "First-time borrowers"
+    },
+    "first_time_profiles": [
+      "student"
+    ]
   }
 }

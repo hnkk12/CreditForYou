@@ -112,9 +112,10 @@ def _tx(monthly, desc="GRAB DOANH THU", extra=()):
 def test_income_stable_grab_driver():
     monthly = [8.2e6, 8.5e6, 8.1e6, 8.3e6, 8.4e6, 8.2e6, 8.3e6, 8.25e6, 8.35e6, 8.2e6, 8.4e6, 8.3e6]
     prepared, _ = prepare_transactions(_tx(monthly))
-    r = estimate_income(prepared).iloc[0]
+    r = estimate_income(prepared, calibration={}).iloc[0]
     assert r["months_of_data"] == 12
-    assert r["estimated_monthly_income"] == pytest.approx(np.quantile(monthly, 0.10), abs=100)
+    assert r["main_income_type"] == "self_employed"           # "GRAB" -> thu nhập tự doanh
+    assert r["estimated_monthly_income"] == pytest.approx(np.mean(monthly), abs=0.01)
     assert r["income_stability"] > 0.95 and r["income_confidence"] == 0.95
     assert r["repayment_capacity"] == "Cao"
 
@@ -125,7 +126,7 @@ def test_income_excludes_non_income_inflows():
              ("C1", "2025-04-10", 20e6, "credit", "Chuyen khoan noi bo tu TK tiet kiem"),
              ("C1", "2025-05-10", 3e6, "credit", "Hoan tien don hang")]
     prepared, _ = prepare_transactions(_tx(monthly, extra=extra))
-    r = estimate_income(prepared).iloc[0]
+    r = estimate_income(prepared, calibration={}).iloc[0]
     assert r["estimated_monthly_income"] == 10e6
     assert r["months_of_data"] == 6 and r["income_confidence"] == 0.95
 
@@ -133,16 +134,17 @@ def test_income_excludes_non_income_inflows():
 def test_income_volatile_is_conservative_and_zero_months_count():
     monthly = [2e6, 15e6, 0, 12e6, 3e6, 14e6]
     prepared, _ = prepare_transactions(_tx(monthly))
-    r = estimate_income(prepared).iloc[0]
+    r = estimate_income(prepared, calibration={}).iloc[0]
     assert r["months_zero_income"] == 1
     assert r["income_stability"] < 0.8
-    assert 0 < r["estimated_monthly_income"] < np.mean(monthly)
+    assert r["estimated_monthly_income"] == pytest.approx(np.mean(monthly), abs=0.01)   # ước tính tốt nhất
+    assert 0 < r["conservative_cash_income"] < np.mean(monthly)                       # dùng cho hạn mức
 
 
 def test_income_detects_debt_payment():
     extra = [("C1", f"2025-{m:02d}-15", 2e6, "debit", "TRA GOP KHOAN VAY") for m in range(1, 7)]
     prepared, _ = prepare_transactions(_tx([10e6] * 6, extra=extra))
-    assert estimate_income(prepared).iloc[0]["detected_monthly_debt"] == 2e6
+    assert estimate_income(prepared, calibration={}).iloc[0]["detected_monthly_debt"] == 2e6
 
 
 def test_unsigned_amounts_without_direction_warns():

@@ -17,7 +17,7 @@ def test_end_to_end(tmp_path):
     assert model is not None and len(res) == 40
     assert res["credit_score"].between(0, 100).all()
     assert set(res["tier"]) <= set("ABCD")
-    assert res["pd"].between(0, 1).all()
+    assert res["pd_challenger"].between(0, 1).all()   # PD chỉ là challenger (use_ml_pd = false)
     k = kpi_summary(res, 1.0)
     assert "AUC_diem_tin_dung" in k and "thu_nhap_MAPE" in k
 

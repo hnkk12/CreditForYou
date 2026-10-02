@@ -1,0 +1,152 @@
+{
+  "so_khach": 500,
+  "trang_thai_han_muc": {
+    "PREAPPROVED_REDUCED": 199,
+    "NOT_ELIGIBLE": 177,
+    "PREAPPROVED": 92,
+    "OFFLINE_REVIEW": 32
+  },
+  "ty_le_co_han_muc": 0.582,
+  "han_muc_trung_vi_(khach_co_han_muc)": 15000000.0,
+  "ho_so_can_nguoi_duyet_tai_quay": 0,
+  "ho_so_xem_xet_ngoai_gio": 32,
+  "nhom_muc_tieu_so_khach": 43,
+  "nhom_muc_tieu_ty_le_co_han_muc": 0.5116279069767442,
+  "gia_lap_tai_quay": {
+    "5000000": {
+      "tat_ca": {
+        "APPROVE": 0.572,
+        "DECLINE": 0.418,
+        "COUNTER_OFFER": 0.01
+      },
+      "nhom_muc_tieu": {
+        "APPROVE": 0.512,
+        "DECLINE": 0.488
+      }
+    },
+    "15000000": {
+      "tat_ca": {
+        "APPROVE": 0.474,
+        "DECLINE": 0.418,
+        "COUNTER_OFFER": 0.108
+      },
+      "nhom_muc_tieu": {
+        "DECLINE": 0.488,
+        "APPROVE": 0.442,
+        "COUNTER_OFFER": 0.07
+      }
+    },
+    "40000000": {
+      "tat_ca": {
+        "COUNTER_OFFER": 0.49,
+        "DECLINE": 0.418,
+        "APPROVE": 0.092
+      },
+      "nhom_muc_tieu": {
+        "DECLINE": 0.488,
+        "COUNTER_OFFER": 0.419,
+        "APPROVE": 0.093
+      }
+    }
+  },
+  "theo_nhom_khach": {
+    "entrepreneur": {
+      "so_khach": 17,
+      "ty_le_co_han_muc": 0.4118,
+      "han_muc_trung_vi": 30000000.0,
+      "trang_thai": {
+        "NOT_ELIGIBLE": 10,
+        "PREAPPROVED": 4,
+        "PREAPPROVED_REDUCED": 3
+      }
+    },
+    "family": {
+      "so_khach": 73,
+      "ty_le_co_han_muc": 0.4521,
+      "han_muc_trung_vi": 23100000.0,
+      "trang_thai": {
+        "NOT_ELIGIBLE": 40,
+        "PREAPPROVED_REDUCED": 24,
+        "PREAPPROVED": 9
+      }
+    },
+    "freelancer": {
+      "so_khach": 26,
+      "ty_le_co_han_muc": 0.5769,
+      "han_muc_trung_vi": 15000000.0,
+      "trang_thai": {
+        "PREAPPROVED_REDUCED": 12,
+        "NOT_ELIGIBLE": 11,
+        "PREAPPROVED": 3
+      }
+    },
+    "high_earner": {
+      "so_khach": 52,
+      "ty_le_co_han_muc": 0.6731,
+      "han_muc_trung_vi": 30000000.0,
+      "trang_thai": {
+        "PREAPPROVED": 28,
+        "NOT_ELIGIBLE": 16,
+        "PREAPPROVED_REDUCED": 7,
+        "OFFLINE_REVIEW": 1
+      }
+    },
+    "investor": {
+      "so_khach": 24,
+      "ty_le_co_han_muc": 0.5,
+      "han_muc_trung_vi": 30000000.0,
+      "trang_thai": {
+        "NOT_ELIGIBLE": 11,
+        "PREAPPROVED": 8,
+        "PREAPPROVED_REDUCED": 4,
+        "OFFLINE_REVIEW": 1
+      }
+    },
+    "manager": {
+      "so_khach": 60,
+      "ty_le_co_han_muc": 0.7833,
+      "han_muc_trung_vi": 30000000.0,
+      "trang_thai": {
+        "PREAPPROVED": 33,
+        "PREAPPROVED_REDUCED": 14,
+        "NOT_ELIGIBLE": 13
+      }
+    },
+    "retiree": {
+      "so_khach": 54,
+      "ty_le_co_han_muc": 0.0741,
+      "han_muc_trung_vi": 15000000.0,
+      "trang_thai": {
+        "NOT_ELIGIBLE": 50,
+        "PREAPPROVED_REDUCED": 4
+      }
+    },
+    "student": {
+      "so_khach": 62,
+      "ty_le_co_han_muc": 0.8226,
+      "han_muc_trung_vi": 11500000.0,
+      "trang_thai": {
+        "PREAPPROVED_REDUCED": 51,
+        "NOT_ELIGIBLE": 11
+      }
+    },
+    "vulnerable": {
+      "so_khach": 30,
+      "ty_le_co_han_muc": 0.0,
+      "han_muc_trung_vi": 0.0,
+      "trang_thai": {
+        "OFFLINE_REVIEW": 30
+      }
+    },
+    "young_professional": {
+      "so_khach": 102,
+      "ty_le_co_han_muc": 0.8529,
+      "han_muc_trung_vi": 15000000.0,
+      "trang_thai": {
+        "PREAPPROVED_REDUCED": 80,
+        "NOT_ELIGIBLE": 15,
+        "PREAPPROVED": 7
+      }
+    }
+  }
+}

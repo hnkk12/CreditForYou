@@ -83,6 +83,14 @@ def normalize_name(name) -> str:
     return s
 
 
+
+def normalize_series(s: pd.Series) -> pd.Series:
+    """normalize_name cho cả cột, nhưng chỉ tính trên các giá trị KHÁC NHAU (nhanh hơn hàng trăm lần
+    với 1-2 triệu giao dịch vốn chỉ có vài nghìn nhãn/merchant khác nhau)."""
+    st = s.astype(str)
+    uniques = pd.unique(st)
+    return st.map(dict(zip(uniques, map(normalize_name, uniques))))
+
 @dataclass
 class ColumnMapping:
     dataset: str
@@ -230,7 +238,7 @@ _OUTFLOW_WORDS = {"debit", "dr", "d", "out", "outflow", "withdrawal", "payment",
 
 def parse_direction(s: pd.Series) -> pd.Series:
     """Trả về +1 (tiền vào), -1 (tiền ra), NaN (không rõ)."""
-    norm = s.astype(str).map(normalize_name)
+    norm = normalize_series(s)
     out = pd.Series(np.nan, index=s.index)
     out[norm.isin(_INFLOW_WORDS)] = 1.0
     out[norm.isin(_OUTFLOW_WORDS)] = -1.0
@@ -244,7 +252,7 @@ def parse_term_months(s: pd.Series) -> pd.Series:
     """' 36 months' -> 36; '3 năm' -> 36; 36 -> 36."""
     if pd.api.types.is_numeric_dtype(s):
         return s.astype(float)
-    st = s.astype(str).map(normalize_name)
+    st = normalize_series(s)
     num = pd.to_numeric(st.str.extract(r"(\d+(?:_\d+)?)")[0].str.replace("_", "."), errors="coerce")
     years = st.str.contains(r"year|nam", na=False)
     return num.where(~years, num * 12)

@@ -6,3 +6,4 @@ openpyxl>=3.1      # đọc dataset .xlsx
 pytest>=7.0        # chạy test
 streamlit>=1.35    # dashboard prototype
 altair>=5.0        # charts in Streamlit
+pyarrow>=14        # cache parquet cho file giao dịch lớn

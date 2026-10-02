@@ -1,12 +1,133 @@
 {
   "n_customers": 500,
-  "mae": 876.9981599999999,
-  "rmse": 1724.374415673928,
-  "mape": 0.22893063504279465,
-  "smape": 0.2717969224867327,
-  "median_absolute_percentage_error": 0.08834977776614869,
-  "within_10pct": 0.616,
-  "within_20pct": 0.724,
-  "mean_signed_error": -50.243919999999974,
+  "mae": 691.2001177361238,
+  "rmse": 1697.1979709056184,
+  "mape": 0.18194663865645605,
+  "smape": 0.22884840174537238,
+  "median_absolute_percentage_error": 0.01737885214268446,
+  "within_10pct": 0.698,
+  "within_20pct": 0.752,
+  "mean_signed_error": -295.7907181163742,
+  "evaluation": "5-fold out-of-fold (hệ số hiệu chỉnh học trên 4/5, đo trên 1/5 còn lại)",
+  "calibration_factors": {
+    "salary": 0.8871266775961554,
+    "pension": 0.8863882775222457,
+    "self_employed": 0.532784345389268,
+    "other": 1.0
+  },
+  "excluding_no_income_last_12m": {
+    "n_customers": 469,
+    "mae": 512.3590167762515,
+    "rmse": 1258.401546264923,
+    "mape": 0.12787488129686148,
+    "smape": 0.11177867989911766,
+    "median_absolute_percentage_error": 0.015758949609420904,
+    "within_10pct": 0.744136460554371,
+    "within_20pct": 0.8017057569296375,
+    "mean_signed_error": -90.81381462300021
+  },
+  "customers_no_income_last_12m": 31,
+  "by_main_income_type": {
+    "none": {
+      "n_customers": 31,
+      "median_absolute_percentage_error": 1.0,
+      "within_10pct": 0.0,
+      "within_20pct": 0.0,
+      "mean_signed_error": -3396.8929
+    },
+    "pension": {
+      "n_customers": 48,
+      "median_absolute_percentage_error": 0.0106,
+      "within_10pct": 0.875,
+      "within_20pct": 0.875,
+      "mean_signed_error": -502.5766
+    },
+    "salary": {
+      "n_customers": 395,
+      "median_absolute_percentage_error": 0.0154,
+      "within_10pct": 0.7494,
+      "within_20pct": 0.8025,
+      "mean_signed_error": -52.6189
+    },
+    "self_employed": {
+      "n_customers": 26,
+      "median_absolute_percentage_error": 0.14,
+      "within_10pct": 0.4231,
+      "within_20pct": 0.6538,
+      "mean_signed_error": 89.0944
+    }
+  },
+  "by_profile": {
+    "entrepreneur": {
+      "n_customers": 17,
+      "median_absolute_percentage_error": 0.2837,
+      "within_10pct": 0.0588,
+      "within_20pct": 0.3529,
+      "mean_signed_error": -1902.8183
+    },
+    "family": {
+      "n_customers": 73,
+      "median_absolute_percentage_error": 0.0168,
+      "within_10pct": 0.6986,
+      "within_20pct": 0.7808,
+      "mean_signed_error": -74.2554
+    },
+    "freelancer": {
+      "n_customers": 26,
+      "median_absolute_percentage_error": 0.1841,
+      "within_10pct": 0.3846,
+      "within_20pct": 0.5385,
+      "mean_signed_error": -251.7989
+    },
+    "high_earner": {
+      "n_customers": 52,
+      "median_absolute_percentage_error": 0.0193,
+      "within_10pct": 0.7115,
+      "within_20pct": 0.75,
+      "mean_signed_error": -1322.0212
+    },
+    "investor": {
+      "n_customers": 24,
+      "median_absolute_percentage_error": 0.0126,
+      "within_10pct": 0.7917,
+      "within_20pct": 0.8333,
+      "mean_signed_error": -69.6307
+    },
+    "manager": {
+      "n_customers": 60,
+      "median_absolute_percentage_error": 0.0145,
+      "within_10pct": 0.7667,
+      "within_20pct": 0.8167,
+      "mean_signed_error": -78.173
+    },
+    "retiree": {
+      "n_customers": 54,
+      "median_absolute_percentage_error": 0.0133,
+      "within_10pct": 0.7778,
+      "within_20pct": 0.7778,
+      "mean_signed_error": -477.9962
+    },
+    "student": {
+      "n_customers": 62,
+      "median_absolute_percentage_error": 0.0163,
+      "within_10pct": 0.7742,
+      "within_20pct": 0.7742,
+      "mean_signed_error": 177.5204
+    },
+    "vulnerable": {
+      "n_customers": 30,
+      "median_absolute_percentage_error": 0.056,
+      "within_10pct": 0.6,
+      "within_20pct": 0.7333,
+      "mean_signed_error": 284.6445
+    },
+    "young_professional": {
+      "n_customers": 102,
+      "median_absolute_percentage_error": 0.014,
+      "within_10pct": 0.7549,
+      "within_20pct": 0.7745,
+      "mean_signed_error": -217.7178
+    }
+  },
   "warnings": []
 }

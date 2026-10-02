@@ -1,0 +1,176 @@
+{
+  "gia_dinh": {
+    "annual_utilization": 1.5,
+    "avg_ticket_share_of_limit": 0.6,
+    "merchant_discount_rate": 0.02,
+    "cost_of_funds": 0.06,
+    "lgd": 0.91,
+    "ead_share": 0.72,
+    "capital_ratio": 0.1,
+    "cost_per_loan_automated": 50000,
+    "cost_per_manual_review": 380000,
+    "pd_scenarios": {
+      "_note": "PD mỗi khoản 6 tháng. 'co_so' = thận trọng ~2× tỷ lệ vỡ nợ Lending Club hạng A/B/C (36 tháng: 5,8/12,9/20,6% -> 6 tháng 1,0/2,3/3,8%) và khớp KPI bản ý tưởng (A < 2%, B < 5%). Đối chiếu: CFPB - tỷ lệ xoá nợ BNPL 3,8% (2021).",
+      "co_so": {
+        "A": 0.02,
+        "B": 0.05,
+        "C": 0.1
+      },
+      "cang_thang_x2": {
+        "A": 0.04,
+        "B": 0.1,
+        "C": 0.2
+      },
+      "nghiem_trong_x3": {
+        "A": 0.06,
+        "B": 0.15,
+        "C": 0.3
+      }
+    },
+    "lending_club_reference_term_months": 36,
+    "benchmarks": {
+      "cfpb_bnpl_merchant_fee_2021": 0.0249,
+      "cfpb_bnpl_chargeoff_rate_2021": 0.038,
+      "lending_club_lgd": 0.91,
+      "lending_club_ead_share": 0.718,
+      "lending_club_pd6m_by_grade": {
+        "A": 0.0099,
+        "B": 0.0227,
+        "C": 0.0377
+      },
+      "vn_12m_deposit_rate_2025": "4.6-5.8%"
+    }
+  },
+  "ky_han_thang": 6,
+  "so_khach_co_han_muc": 291,
+  "kich_ban": {
+    "co_so": {
+      "pd_theo_nhom": {
+        "A": 0.02,
+        "B": 0.05,
+        "C": 0.1
+      },
+      "so_khach": 291,
+      "giai_ngan_nam": 11342550000.0,
+      "du_no_binh_quan": 3332323823.0,
+      "thu_lai": 350869151.0,
+      "phi_doi_tac": 226851000.0,
+      "chi_phi_von": 199939429.0,
+      "chi_phi_van_hanh": 36375000.0,
+      "lo_du_kien": 246450859.0,
+      "loi_nhuan": 94954862.0,
+      "pd_binh_quan_theo_du_no": 0.0332,
+      "RoC": 0.285,
+      "bien_loi_nhuan_tren_giai_ngan": 0.0084,
+      "ty_le_lo_tren_giai_ngan": 0.0217
+    },
+    "cang_thang_x2": {
+      "pd_theo_nhom": {
+        "A": 0.04,
+        "B": 0.1,
+        "C": 0.2
+      },
+      "so_khach": 291,
+      "giai_ngan_nam": 11342550000.0,
+      "du_no_binh_quan": 3332323823.0,
+      "thu_lai": 350869151.0,
+      "phi_doi_tac": 226851000.0,
+      "chi_phi_von": 199939429.0,
+      "chi_phi_van_hanh": 36375000.0,
+      "lo_du_kien": 492901718.0,
+      "loi_nhuan": -151495997.0,
+      "pd_binh_quan_theo_du_no": 0.0663,
+      "RoC": -0.4546,
+      "bien_loi_nhuan_tren_giai_ngan": -0.0134,
+      "ty_le_lo_tren_giai_ngan": 0.0435
+    },
+    "nghiem_trong_x3": {
+      "pd_theo_nhom": {
+        "A": 0.06,
+        "B": 0.15,
+        "C": 0.3
+      },
+      "so_khach": 291,
+      "giai_ngan_nam": 11342550000.0,
+      "du_no_binh_quan": 3332323823.0,
+      "thu_lai": 350869151.0,
+      "phi_doi_tac": 226851000.0,
+      "chi_phi_von": 199939429.0,
+      "chi_phi_van_hanh": 36375000.0,
+      "lo_du_kien": 739352578.0,
+      "loi_nhuan": -397946856.0,
+      "pd_binh_quan_theo_du_no": 0.0995,
+      "RoC": -1.1942,
+      "bien_loi_nhuan_tren_giai_ngan": -0.0351,
+      "ty_le_lo_tren_giai_ngan": 0.0652
+    },
+    "theo_PD_Lending_Club": {
+      "pd_theo_nhom": {
+        "A": 0.0174,
+        "B": 0.0214,
+        "C": 0.0188
+      },
+      "so_khach": 291,
+      "giai_ngan_nam": 11342550000.0,
+      "du_no_binh_quan": 3332323823.0,
+      "thu_lai": 350869151.0,
+      "phi_doi_tac": 226851000.0,
+      "chi_phi_von": 199939429.0,
+      "chi_phi_van_hanh": 36375000.0,
+      "lo_du_kien": 122883853.0,
+      "loi_nhuan": 218521868.0,
+      "pd_binh_quan_theo_du_no": 0.0165,
+      "RoC": 0.6558,
+      "bien_loi_nhuan_tren_giai_ngan": 0.0193,
+      "ty_le_lo_tren_giai_ngan": 0.0108
+    }
+  },
+  "pd_hoa_von_theo_nhom": {
+    "A": 0.0426,
+    "B": 0.0503,
+    "C": 0.0605,
+    "toan_danh_muc": 0.0459,
+    "ty_le_lo_hoa_von_tren_giai_ngan": 0.0301
+  },
+  "do_nhay": {
+    "them_1pp_lai_suat": 33323238.0,
+    "them_1pp_phi_doi_tac": 113425500.0,
+    "them_1pp_chi_phi_von": -33323238.0
+  },
+  "kinh_doanh_mo_them": {
+    "khach_mo_them_(truyen_thong_khong_duyet)": {
+      "so_khach": 211,
+      "giai_ngan_nam": 5820900000.0,
+      "du_no_binh_quan": 1709954189.0,
+      "thu_lai": 177616028.0,
+      "phi_doi_tac": 116418000.0,
+      "chi_phi_von": 102597251.0,
+      "chi_phi_van_hanh": 26375000.0,
+      "lo_du_kien": 119511428.0,
+      "loi_nhuan": 45550348.0,
+      "pd_binh_quan_theo_du_no": 0.0313,
+      "RoC": 0.2664,
+      "bien_loi_nhuan_tren_giai_ngan": 0.0078,
+      "ty_le_lo_tren_giai_ngan": 0.0205
+    },
+    "trong_do_nhom_muc_tieu": {
+      "so_khach": 18,
+      "giai_ngan_nam": 594300000.0,
+      "du_no_binh_quan": 174806244.0,
+      "thu_lai": 21443017.0,
+      "phi_doi_tac": 11886000.0,
+      "chi_phi_von": 10488375.0,
+      "chi_phi_van_hanh": 2250000.0,
+      "lo_du_kien": 21429954.0,
+      "loi_nhuan": -839312.0,
+      "pd_binh_quan_theo_du_no": 0.055,
+      "RoC": -0.048,
+      "bien_loi_nhuan_tren_giai_ngan": -0.0014,
+      "ty_le_lo_tren_giai_ngan": 0.0361
+    }
+  },
+  "van_hanh": {
+    "ho_so_khong_con_phai_nguoi_duyet": 199,
+    "chi_phi_tranh_duoc_moi_lan_xet": 65670000
+  }
+}

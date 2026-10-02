@@ -155,285 +155,285 @@
       ]
     },
     "gradient_boosting": {
-      "roc_auc": 0.6708,
-      "pr_auc": 0.342,
-      "gini": 0.3417,
-      "ks": 0.2497,
+      "roc_auc": 0.6706,
+      "pr_auc": 0.3414,
+      "gini": 0.3412,
+      "ks": 0.2482,
       "brier": 0.1507,
-      "accuracy@0.5": 0.8,
+      "accuracy@0.5": 0.7999,
       "accuracy_baseline_all_good": 0.7986,
-      "decision_threshold": 0.2067,
+      "decision_threshold": 0.2037,
       "threshold_source": "validation_f1",
-      "accuracy": 0.6507,
-      "precision": 0.3065,
-      "recall": 0.5815,
-      "f1": 0.4014,
+      "accuracy": 0.6452,
+      "precision": 0.3036,
+      "recall": 0.5887,
+      "f1": 0.4006,
       "confusion_matrix": [
         [
-          32015,
-          15901
+          31600,
+          16316
         ],
         [
-          5057,
-          7027
+          4970,
+          7114
         ]
       ],
       "default_rate": 0.2014,
       "mean_pd": 0.2007,
       "calibration_bins": [
         {
-          "mean_predicted_pd": 0.0791,
-          "observed_default_rate": 0.074
+          "mean_predicted_pd": 0.0783,
+          "observed_default_rate": 0.0748
         },
         {
-          "mean_predicted_pd": 0.1045,
-          "observed_default_rate": 0.106
+          "mean_predicted_pd": 0.1044,
+          "observed_default_rate": 0.105
         },
         {
-          "mean_predicted_pd": 0.1246,
-          "observed_default_rate": 0.1222
+          "mean_predicted_pd": 0.1244,
+          "observed_default_rate": 0.1245
         },
         {
-          "mean_predicted_pd": 0.1437,
-          "observed_default_rate": 0.1435
+          "mean_predicted_pd": 0.1436,
+          "observed_default_rate": 0.1427
         },
         {
-          "mean_predicted_pd": 0.1648,
-          "observed_default_rate": 0.1789
+          "mean_predicted_pd": 0.1647,
+          "observed_default_rate": 0.1782
         },
         {
-          "mean_predicted_pd": 0.1883,
-          "observed_default_rate": 0.1849
+          "mean_predicted_pd": 0.188,
+          "observed_default_rate": 0.186
         },
         {
-          "mean_predicted_pd": 0.2174,
-          "observed_default_rate": 0.221
+          "mean_predicted_pd": 0.2172,
+          "observed_default_rate": 0.2185
         },
         {
-          "mean_predicted_pd": 0.2576,
-          "observed_default_rate": 0.2568
+          "mean_predicted_pd": 0.2577,
+          "observed_default_rate": 0.2553
         },
         {
-          "mean_predicted_pd": 0.3113,
-          "observed_default_rate": 0.3115
+          "mean_predicted_pd": 0.3119,
+          "observed_default_rate": 0.3172
         },
         {
-          "mean_predicted_pd": 0.4158,
-          "observed_default_rate": 0.4152
+          "mean_predicted_pd": 0.4168,
+          "observed_default_rate": 0.4118
         }
       ]
     },
     "gradient_boosting_balanced": {
-      "roc_auc": 0.6704,
-      "pr_auc": 0.3421,
-      "gini": 0.3408,
-      "ks": 0.2466,
-      "brier": 0.2253,
-      "accuracy@0.5": 0.6401,
+      "roc_auc": 0.6703,
+      "pr_auc": 0.3423,
+      "gini": 0.3407,
+      "ks": 0.2484,
+      "brier": 0.2251,
+      "accuracy@0.5": 0.6406,
       "accuracy_baseline_all_good": 0.7986,
-      "decision_threshold": 0.4988,
+      "decision_threshold": 0.5139,
       "threshold_source": "validation_f1",
-      "accuracy": 0.6388,
-      "precision": 0.3004,
-      "recall": 0.5975,
-      "f1": 0.3998,
+      "accuracy": 0.6587,
+      "precision": 0.3099,
+      "recall": 0.5665,
+      "f1": 0.4007,
       "confusion_matrix": [
         [
-          31105,
-          16811
+          32676,
+          15240
         ],
         [
-          4864,
-          7220
+          5239,
+          6845
         ]
       ],
       "default_rate": 0.2014,
-      "mean_pd": 0.4698,
+      "mean_pd": 0.4691,
       "calibration_bins": [
         {
-          "mean_predicted_pd": 0.2461,
-          "observed_default_rate": 0.0758
+          "mean_predicted_pd": 0.2428,
+          "observed_default_rate": 0.0752
         },
         {
-          "mean_predicted_pd": 0.3124,
-          "observed_default_rate": 0.1048
+          "mean_predicted_pd": 0.3102,
+          "observed_default_rate": 0.1082
         },
         {
-          "mean_predicted_pd": 0.3582,
-          "observed_default_rate": 0.1258
+          "mean_predicted_pd": 0.3569,
+          "observed_default_rate": 0.123
         },
         {
-          "mean_predicted_pd": 0.3976,
-          "observed_default_rate": 0.1399
+          "mean_predicted_pd": 0.3972,
+          "observed_default_rate": 0.1438
         },
         {
-          "mean_predicted_pd": 0.4379,
-          "observed_default_rate": 0.1762
+          "mean_predicted_pd": 0.4373,
+          "observed_default_rate": 0.1717
         },
         {
-          "mean_predicted_pd": 0.4782,
-          "observed_default_rate": 0.19
+          "mean_predicted_pd": 0.4776,
+          "observed_default_rate": 0.1922
         },
         {
-          "mean_predicted_pd": 0.5227,
-          "observed_default_rate": 0.2207
+          "mean_predicted_pd": 0.5229,
+          "observed_default_rate": 0.2132
         },
         {
-          "mean_predicted_pd": 0.5765,
-          "observed_default_rate": 0.2545
+          "mean_predicted_pd": 0.5773,
+          "observed_default_rate": 0.2577
         },
         {
           "mean_predicted_pd": 0.6387,
-          "observed_default_rate": 0.3143
+          "observed_default_rate": 0.3132
         },
         {
-          "mean_predicted_pd": 0.7294,
-          "observed_default_rate": 0.412
+          "mean_predicted_pd": 0.73,
+          "observed_default_rate": 0.416
         }
       ]
     },
     "random_forest_balanced": {
       "roc_auc": 0.6693,
-      "pr_auc": 0.3394,
+      "pr_auc": 0.3396,
       "gini": 0.3387,
-      "ks": 0.248,
-      "brier": 0.2174,
-      "accuracy@0.5": 0.6691,
+      "ks": 0.2472,
+      "brier": 0.2173,
+      "accuracy@0.5": 0.6682,
       "accuracy_baseline_all_good": 0.7986,
-      "decision_threshold": 0.483,
+      "decision_threshold": 0.4826,
       "threshold_source": "validation_f1",
-      "accuracy": 0.6482,
-      "precision": 0.3049,
-      "recall": 0.5835,
-      "f1": 0.4005,
+      "accuracy": 0.647,
+      "precision": 0.3041,
+      "recall": 0.5844,
+      "f1": 0.4001,
       "confusion_matrix": [
         [
-          31841,
-          16075
+          31759,
+          16157
         ],
         [
-          5033,
-          7051
+          5022,
+          7062
         ]
       ],
       "default_rate": 0.2014,
-      "mean_pd": 0.456,
+      "mean_pd": 0.4559,
       "calibration_bins": [
         {
-          "mean_predicted_pd": 0.2521,
-          "observed_default_rate": 0.0772
+          "mean_predicted_pd": 0.252,
+          "observed_default_rate": 0.0773
         },
         {
-          "mean_predicted_pd": 0.3123,
-          "observed_default_rate": 0.1012
+          "mean_predicted_pd": 0.3117,
+          "observed_default_rate": 0.1027
         },
         {
-          "mean_predicted_pd": 0.3533,
-          "observed_default_rate": 0.1213
+          "mean_predicted_pd": 0.3528,
+          "observed_default_rate": 0.121
         },
         {
-          "mean_predicted_pd": 0.3891,
-          "observed_default_rate": 0.1507
+          "mean_predicted_pd": 0.3887,
+          "observed_default_rate": 0.149
         },
         {
-          "mean_predicted_pd": 0.4218,
-          "observed_default_rate": 0.1803
+          "mean_predicted_pd": 0.4215,
+          "observed_default_rate": 0.1812
         },
         {
-          "mean_predicted_pd": 0.4572,
-          "observed_default_rate": 0.1833
+          "mean_predicted_pd": 0.4571,
+          "observed_default_rate": 0.1823
         },
         {
-          "mean_predicted_pd": 0.4994,
-          "observed_default_rate": 0.2193
+          "mean_predicted_pd": 0.4996,
+          "observed_default_rate": 0.2172
         },
         {
           "mean_predicted_pd": 0.5499,
-          "observed_default_rate": 0.2623
+          "observed_default_rate": 0.265
         },
         {
-          "mean_predicted_pd": 0.6149,
-          "observed_default_rate": 0.3052
+          "mean_predicted_pd": 0.6152,
+          "observed_default_rate": 0.3063
         },
         {
-          "mean_predicted_pd": 0.7098,
-          "observed_default_rate": 0.4132
+          "mean_predicted_pd": 0.7103,
+          "observed_default_rate": 0.412
         }
       ]
     }
   },
   "metrics_test": {
     "gradient_boosting": {
-      "roc_auc": 0.6667,
-      "pr_auc": 0.3349,
-      "gini": 0.3334,
-      "ks": 0.2388,
+      "roc_auc": 0.667,
+      "pr_auc": 0.3352,
+      "gini": 0.334,
+      "ks": 0.2398,
       "brier": 0.1512,
-      "accuracy@0.5": 0.7995,
+      "accuracy@0.5": 0.7994,
       "accuracy_baseline_all_good": 0.7986,
-      "decision_threshold": 0.2067,
+      "decision_threshold": 0.2037,
       "threshold_source": "validation_f1",
-      "accuracy": 0.6457,
-      "precision": 0.301,
-      "recall": 0.5745,
-      "f1": 0.3951,
+      "accuracy": 0.6401,
+      "precision": 0.2989,
+      "recall": 0.5851,
+      "f1": 0.3957,
       "confusion_matrix": [
         [
-          31798,
-          16118
+          31336,
+          16580
         ],
         [
-          5142,
-          6942
+          5014,
+          7070
         ]
       ],
       "default_rate": 0.2014,
-      "mean_pd": 0.2009,
+      "mean_pd": 0.201,
       "calibration_bins": [
         {
-          "mean_predicted_pd": 0.0794,
-          "observed_default_rate": 0.076
+          "mean_predicted_pd": 0.0787,
+          "observed_default_rate": 0.075
         },
         {
-          "mean_predicted_pd": 0.1051,
-          "observed_default_rate": 0.1023
+          "mean_predicted_pd": 0.1049,
+          "observed_default_rate": 0.1043
         },
         {
-          "mean_predicted_pd": 0.1253,
-          "observed_default_rate": 0.1283
+          "mean_predicted_pd": 0.1252,
+          "observed_default_rate": 0.124
         },
         {
-          "mean_predicted_pd": 0.1442,
-          "observed_default_rate": 0.1555
+          "mean_predicted_pd": 0.1443,
+          "observed_default_rate": 0.155
         },
         {
           "mean_predicted_pd": 0.1654,
-          "observed_default_rate": 0.1763
+          "observed_default_rate": 0.1787
         },
         {
-          "mean_predicted_pd": 0.189,
-          "observed_default_rate": 0.188
+          "mean_predicted_pd": 0.1891,
+          "observed_default_rate": 0.187
         },
         {
-          "mean_predicted_pd": 0.218,
-          "observed_default_rate": 0.2123
+          "mean_predicted_pd": 0.2179,
+          "observed_default_rate": 0.2125
         },
         {
-          "mean_predicted_pd": 0.2575,
-          "observed_default_rate": 0.252
+          "mean_predicted_pd": 0.2578,
+          "observed_default_rate": 0.2575
         },
         {
-          "mean_predicted_pd": 0.312,
-          "observed_default_rate": 0.3113
+          "mean_predicted_pd": 0.3125,
+          "observed_default_rate": 0.3075
         },
         {
-          "mean_predicted_pd": 0.4135,
-          "observed_default_rate": 0.4118
+          "mean_predicted_pd": 0.4144,
+          "observed_default_rate": 0.4125
         }
       ]
     }
   },
-  "decision_threshold": 0.20673595649020035,
+  "decision_threshold": 0.20371610935526854,
   "train_info": {
     "rows_used": 300000,
     "rows_dropped_unknown_label": 305087,
@@ -465,8 +465,8 @@
         "Late (16-30 days)": 1421,
         "Does not meet the credit policy. Status:Fully Paid": 660,
         "Does not meet the credit policy. Status:Charged Off": 256,
-        "Default": 13,
-        "nan": 13
+        "nan": 13,
+        "Default": 13
       },
       "mapped_good": 358329,
       "mapped_default": 90150,
@@ -479,8 +479,8 @@
     "test_rows": 60000,
     "test_evaluated_only_after_selection": true
   },
-  "trained_on": "D:\\NCKH\\CreditForYou\\dataset isb\\accepted_2007_to_2018Q4.csv",
-  "trained_at": "2026-10-01T10:54:28",
+  "trained_on": "D:\\UEH ISB 2026\\CreditForYou\\dataset isb\\accepted_2007_to_2018Q4.csv",
+  "trained_at": "2026-10-01T12:11:31",
   "model_version": "creditforyou-pd-v2",
   "target_definition": "resolved Lending Club loan_status"
 }

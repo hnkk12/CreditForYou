@@ -20,7 +20,10 @@ def explain_pd(artifact, features: pd.DataFrame, top_n=5) -> list[dict]:
         delta = base - masked_pd
         explanations.append({
             "feature": feature,
-            "value": None if pd.isna(row.iloc[0][feature]) else row.iloc[0][feature],
+            # chuỗi để bảng hiển thị được cả đặc trưng số lẫn phân loại (rent, purpose...)
+            "value": "" if pd.isna(row.iloc[0][feature]) else (
+                f"{row.iloc[0][feature]:.4g}" if isinstance(row.iloc[0][feature], (int, float, np.floating))
+                else str(row.iloc[0][feature])),
             "pd_delta_vs_missing": delta,
             "direction": "higher predicted risk" if delta > 0 else "lower predicted risk",
         })
